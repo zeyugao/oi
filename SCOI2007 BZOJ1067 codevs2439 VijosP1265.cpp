@@ -31,7 +31,7 @@ int query_max(int k,int l,int r){
   else return max(query_max(lc,l,mid),query_max(rc,mid+1,r));
 }
 
-//ºËĞÄ£º°Ñtrue¡¢false¡¢maybeµÄ·ÖÀàÌÖÂÛ³öÀ´£¬ÄÑµã£»Ëã·¨¼¼Êõ£¬Ïß¶ÎÊ÷£¬Çø¼ä²éÑ¯×î´óÖµ
+//æ ¸å¿ƒï¼šæŠŠtrueã€falseã€maybeçš„åˆ†ç±»è®¨è®ºå‡ºæ¥ï¼Œéš¾ç‚¹ï¼›ç®—æ³•æŠ€æœ¯ï¼Œçº¿æ®µæ ‘ï¼ŒåŒºé—´æŸ¥è¯¢æœ€å¤§å€¼
 int main(){
   scanf("%d",&n);
   build(1,1,n);
@@ -42,38 +42,39 @@ int main(){
   if(r==year[1]||l==year[n]) {printf("maybe\n");continue;}
   int x=lower_bound(year+1,year+1+n,l)-year;
 
-//È¡µÃyear[x/y]>=l/rµÄ×îĞ¡x/yÖµ
+//å–å¾—year[x/y]>=l/rçš„æœ€å°x/yå€¼
   int y=lower_bound(year+1,year+1+n,r)-year;
   int xx=(year[x]==l),yy=(year[y]==r);
 
-//Èç¹ûlÄêÓÖÊı¾İ£¬Ôòyear[x]Ó¦Îªl£¬
-//Èç2000 2001 2003 2004 2005 ÇëÇó2002£¬ÇëÇó³öµÄÊÇ2003£¬²»µÈ£¬ËµÃ÷µÚlÄêµÄÊı¾İÃ»ÓĞ
+//å¦‚æœlå¹´åˆæ•°æ®ï¼Œåˆ™year[x]åº”ä¸ºlï¼Œ
+//å¦‚2000 2001 2003 2004 2005 è¯·æ±‚2002ï¼Œè¯·æ±‚å‡ºçš„æ˜¯2003ï¼Œä¸ç­‰ï¼Œè¯´æ˜ç¬¬lå¹´çš„æ•°æ®æ²¡æœ‰
   if(!xx&&!yy) {printf("maybe\n");continue;}
 
-//ÓĞrÄêÊı¾İ£¬ÎŞlÄêÊı¾İ
+//æœ‰rå¹´æ•°æ®ï¼Œæ— lå¹´æ•°æ®
   if(!xx&&yy){
-//×î´óÖµ
+//æœ€å¤§å€¼
   mx=query_max(1,x,y-1);
-//Èç¹û[x,y-1]ÖĞ×î´óÖµ²»´óÓÚy£¬Ôò¿ÉÄÜÎªµİÔöĞòÁĞ£¬·ñÔò£¬²»¿ÉÄÜ
+//å¦‚æœ[x,y-1]ä¸­æœ€å¤§å€¼ä¸å¤§äºyï¼Œåˆ™å¯èƒ½ä¸ºé€’å¢åºåˆ—ï¼Œå¦åˆ™ï¼Œä¸å¯èƒ½
   if(mx<w[y]) printf("maybe\n");else printf("false\n");
   continue;
   }
-//Í¬Àí
+//åŒç†
   if(xx&&!yy){
   mx=query_max(1,x+1,y-1);
   if(mx<w[x]) printf("maybe\n");else printf("false\n");
   continue;
   }
   if(xx&&yy) {
-//YÄêµÄ½µÓêÁ¿²»³¬¹ıXÄê
+//Yå¹´çš„é™é›¨é‡ä¸è¶…è¿‡Xå¹´
   if(w[x]<w[y]) {printf("false\n");continue;};
   mx=query_max(1,x+1,y-1);
-//×î´óÖµÒªĞ¡ÓÚrÄê
+//æœ€å¤§å€¼è¦å°äºrå¹´
   if(mx>=w[y]){printf("false\n");continue;}
-//ÖĞ¼äÓĞÎ´È·¶¨ÖµµÄ
+//ä¸­é—´æœ‰æœªç¡®å®šå€¼çš„
   if((y-x)!=(year[y]-year[x])) {printf("maybe\n");continue;}
-//ÅĞ¶ÏÍê£¬Ê£ÏÂµÄ¾ÍÊÇtrue
+//åˆ¤æ–­å®Œï¼Œå‰©ä¸‹çš„å°±æ˜¯true
   printf("true\n");
   }
   }
 }
+

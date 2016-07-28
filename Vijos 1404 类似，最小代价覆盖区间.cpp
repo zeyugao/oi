@@ -28,7 +28,7 @@ struct node {
 struct SegTree {
                  ll t[maxn << 2];
 
-                 //½¨Ê÷
+                 //å»ºæ ‘
                  void Build(int p, int l, int r) {
                                 t[ p] = INF;
                                  if (l == r)
@@ -38,7 +38,7 @@ struct SegTree {
                                 Build( rp, mid + 1, r );
                 }
 
-                 //¸üÐÂÎ»ÖÃÎªa£¬root=p£¬ÁÙÊ±Çø¼äÎª[l,r]µÄÖµÎªc
+                 //æ›´æ–°ä½ç½®ä¸ºaï¼Œroot=pï¼Œä¸´æ—¶åŒºé—´ä¸º[l,r]çš„å€¼ä¸ºc
                  void Update(int a, ll c, int p, int l, int r) {
                                  if (l == r) {
                                                 t[ p] = min (t[p], c);
@@ -51,7 +51,7 @@ struct SegTree {
                 }
 
                 
-                 //²éÑ¯Çø¼ä[a,b]ÖÐ£¬rootÎªp£¬ÁÙÊ±Çø¼äÎª[l,r]µÄ×îÐ¡Öµ
+                 //æŸ¥è¯¢åŒºé—´[a,b]ä¸­ï¼Œrootä¸ºpï¼Œä¸´æ—¶åŒºé—´ä¸º[l,r]çš„æœ€å°å€¼
                  ll Query(int a, int b, int p, int l, int r) {
                                  if (a <= l && r <= b ) {
                                                  return t[p ];
@@ -68,7 +68,7 @@ bool cmp(node a, node b) {
                  return a .ed < b.ed;
 }
 
-//dp[t[i].ed] = min{dp[k] + t[i].sl} k¡Ê[t[i].st-1,t[i].ed-1] //ÍùÇ°²éÑ¯ÄÜÓëÇ°ÃæµÄ¶Ô½ÓÉÏ£¬±£Ö¤È«²¿¸²¸Ç
+//dp[t[i].ed] = min{dp[k] + t[i].sl} kâˆˆ[t[i].st-1,t[i].ed-1] //å¾€å‰æŸ¥è¯¢èƒ½ä¸Žå‰é¢çš„å¯¹æŽ¥ä¸Šï¼Œä¿è¯å…¨éƒ¨è¦†ç›–
 int main() {
                 scanf( "%d%d%d", &N, &M, &E);
                  for (int i = 0; i < maxn; ++i)
@@ -89,14 +89,14 @@ int main() {
                                                 dp[t[i].ed] = min(dp[t[i].ed], (ll )t[i].sl);
                                 }
                                  else {
-                                                 //botÎªt[i].st£¬Èôst<M£¬¸üÐÂÎªM£»topÎªed£¬¸üÐÂ·½·¨Í¬ÉÏ
+                                                 //botä¸ºt[i].stï¼Œè‹¥st<Mï¼Œæ›´æ–°ä¸ºMï¼›topä¸ºedï¼Œæ›´æ–°æ–¹æ³•åŒä¸Š
                                                  int bot = max (t[i].st - 1, M), top = min(E, max(t[i].ed - 1, M));
 
-                                                 //²éÑ¯[bot£¬top]Çø¼äÖÐ£¬dp×îÐ¡Öµ
+                                                 //æŸ¥è¯¢[botï¼Œtop]åŒºé—´ä¸­ï¼Œdpæœ€å°å€¼
                                                  ll tmin = ST.Query(bot, top, 1, 1, maxn);
                                                 dp[t[i].ed] = min(dp[t[i].ed], tmin + t[i].sl);
                                 }
-                                 //¸üÐÂdp
+                                 //æ›´æ–°dp
                                 ST.Update(t[i].ed, dp[t[i].ed], 1, 1, maxn);
                 }
                  if (dp[E] >= INF) printf("-1\n" );

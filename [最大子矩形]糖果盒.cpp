@@ -1,12 +1,12 @@
 //http://www.lai18.com/content/2171691.html
 /*
-���߷���ʱ�临�Ӷ�ΪO(nm)������һ��ɨ�跨��ʱ�临�Ӷ�ΪO(S^2)��SΪ�ϰ�����������߿ռ���ͬ�����Է����ʹ�ã�
+悬线法，时间复杂度为O(nm)（还有一种扫描法，时间复杂度为O(S^2)，S为障碍点个数，二者空间相同，可以分情况使用）
 
-һ��ʼ���õ��Ǳ�̵ķ�������sum,l,r,maxl,maxr,heightȫ��Ԥ������������OJ����֮�󣬰����ַ�����OJ�ķ���ȡ�����̣���ʱ�����1s֮�ࡢ�ռ�����һ��
+一开始我用的是标程的方法，把sum,l,r,maxl,maxr,height全部预处理出来。听OJ讲了之后，把那种方法和OJ的方法取长补短，总时间快了1s之多、空间少了一半
 
-ֻԤ����sum��l,r��ֻ��Ҫ�洢��ǰ�еģ�maxl��maxr01������height�͵ع���������λ�ã�����Ҫע����ǣ����Ƶ�ʱ����������ϰ��㣬������ܵ���Ϊl[j]��max[i-1,j]�����ֵ�����ұ����ơ�������ϰ��㣬�������maxl��Ϊ0��maxr��Ϊm+1����Ϊ������һ�е�ʱ�����߸߶ȱ��1��maxl��maxrֻ����һ�о�����������һ���޹أ���˰���һ����Ϊ��ֵ��
+只预处理sum。l,r都只需要存储当前行的，maxl和maxr01滚动，height就地滚动（绝对位置）。需要注意的是，递推的时候如果不是障碍点，最左边能到达为l[j]和max[i-1,j]的最大值，最右边类似。如果是障碍点，则最把他maxl设为0，maxr设为m+1。因为到了下一行的时候，悬线高度变成1，maxl和maxr只由这一行决定，而和上一行无关，因此把上一行设为极值。
 
-OJ�ķ�����һ�㲻ͬ���Ƕ���maxl��maxr�Ĵ�����ʽ��û���õ��Ƶķ���������������ɨ��ĵ�һ������һ�����߶̵ġ���û�в��á�
+OJ的方法有一点不同的是对于maxl和maxr的处理方式，没有用递推的方法，而是向左右扫描的第一根比这一根悬线短的。我没有采用。
 */
 #include <cstdio>
 
@@ -46,7 +46,7 @@ int main()
 	
 	for (long i=1;i<n+1;i++)
 	{
-		//i&1 �ǹ������������ٿռ临�ƶ�
+		//i&1 是滚动操作，减少空间复制度
 		for (long j=1;j<m+1;j++)
 			maxl[i&1][j] = maxr[i&1][j] = 0;
 		l[0] = 0;
@@ -70,7 +70,7 @@ int main()
 		{
 			if (num[i][j])
 			{
-				//����֮������r[j]=j-1��ǰ�����l[j]=j;����Ϊ������ȥ��ʱ�򣬻��j�е�Ҳ���ϣ�һ����ȥ����r�Ĳ���
+				//这里之所以用r[j]=j-1而前面的是l[j]=j;是因为在最后减去的时候，会把j列的也算上，一并减去，而r的不会
 				r[j] = r[j+1];
 				maxr[i&1][j] = MIN(r[j],maxr[(i&1)^1][j]);
 			}
@@ -81,7 +81,7 @@ int main()
 			}
 		}
  		for (long j=1;j<m+1;j++)
-			//��ͬ��ͼƬ����
+			//看同名图片解析
 			ans = MAX(ans,sum[i][maxr[i&1][j]]+sum[height[j]][maxl[i&1][j]]-sum[height[j]][maxr[i&1][j]]-sum[i][maxl[i&1][j]]);
 	}
 	printf("%ld",ans);
