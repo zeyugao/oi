@@ -2,7 +2,7 @@
 #include<cstdio>
 using namespace std;
 struct data1 {
-	int lm, rm, mx; //lm 表示tree[i]这个结点包含的区间的最左端必取时的最大值，rm同理，
+	int lm, rm, mx; //lm 表示tree[i]这个结点包含的区间的最左端必取时的最大值，rm同理，mx表示这个区间中最大值
 	int sum;
 	int l, r;
 }tree[2000001];
@@ -12,9 +12,11 @@ void update(int k)
 {
 	tree[k].sum = tree[k << 1].sum + tree[k << 1 | 1].sum;
 	tree[k].lm = max(tree[k << 1].lm, tree[k << 1].sum + tree[k << 1 | 1].lm);
-	
+	//k这个节点下，必取左边时最大值：左孩子的lm或者左孩子全部取+右孩子的lm
 	tree[k].rm = max(tree[k << 1 | 1].rm, tree[k << 1].rm + tree[k << 1 | 1].sum);
+	//rm同理
 	tree[k].mx = max(max(tree[k << 1].mx, tree[k << 1 | 1].mx), tree[k << 1].rm + tree[k << 1 | 1].lm);
+	//这棵树的最大值：左孩子的lm或右孩子的rm或从中间（这棵树的右孩子的lm+左孩子的rm）保证中间没有中断
 }
 void build(int k, int s, int t)
 {
@@ -23,12 +25,14 @@ void build(int k, int s, int t)
 	int mid = (s + t) >> 1;
 	build(k << 1, s, mid);
 	build(k << 1 | 1, mid + 1, t);
+	//放在最后，要自下而上更新
 	update(k);
 }
 data1 ask(int k, int p, int q)
 {
 	data1 g, h, a;
 	int l = tree[k].l, r = tree[k].r;
+	//二分法，找到区间，满足结点k的范围就是传递下来的范围，可以直接调用
 	if (l == p&&q == r)return tree[k];
 	int mid = (l + r) >> 1;
 	if (q <= mid) return ask(k << 1, p, q);
@@ -36,12 +40,18 @@ data1 ask(int k, int p, int q)
 	else {
 		g = ask(k << 1, p, mid);
 		h = ask(k << 1 | 1, mid + 1, q);
+		//分别向左右询问
+		//这里之所以不能直接调用在update()中应用好的，
+		//是因为ask的区间可能并不是update过的，需要二分再次计算
+		
+		//ask过程原理与update原理相同
 		a.mx = max(max(g.mx, h.mx), g.rm + h.lm);
 		a.rm = max(h.sum + g.rm, h.rm);
 		a.lm = max(g.lm, g.sum + h.lm);
 		return a;
 	}
 }
+//修改叶节点值，并update
 void change(int k, int x, int y)
 {
 	int l = tree[k].l, r = tree[k].r;
