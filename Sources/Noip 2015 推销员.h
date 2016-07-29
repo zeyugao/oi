@@ -30,6 +30,7 @@ bool has[maxn];
 struct HeapNode {
 	int id, x;
 	LL val;
+	//价值不相同时，按价值降序，否则，按距离升序
 	bool operator < (const HeapNode& t) const { return val != t.val ? val < t.val : x > t.x; }
 };
 HeapNode Max(HeapNode a, HeapNode b) {
@@ -56,6 +57,9 @@ int main() {
 			//Q这里保存的全部都是在划分界限右边的，此处是为了删除再划分界限以左的元素，相当于划分界线右移
 			while (u.x <= T && !Q.empty())u = Q.top(), Q.pop();
 			if (u.x > T && Q.empty()) u = /*(HeapNode)*/{ 0, 0, 0 };
+			//当u.x>T时而Q不空时，ans+=A[i]+2*(S[i]-T)
+			//如果u.x<=T而Q不空时，不会有这种情况
+			//如果u.x<=T且Q空时，此时
 			else u.val -= 2ll * T;
 		}
 		HeapNode v; v = /*(HeapNode) */{ 0, 0, 0 };
@@ -65,6 +69,7 @@ int main() {
 		printf("%lld\n", ans);
 		if (u.x > T) {
 			T = u.x;
+			//Tid保存T是第几个数
 			for (++Tid; Tid <= n && S[Tid] <= T; Tid++) if (!has[Tid])
 				Q2.push(/*(HeapNode)*/{ Tid, S[Tid], A[Tid] });
 		}
