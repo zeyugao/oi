@@ -451,68 +451,6 @@ int main()
 		b = cut();
 		printf("%lld\n", ans);
 	}*/
-const int BufferSize = 1 << 16;
-char buffer[BufferSize], *Head, *Tail;
-inline char Getchar() {
-	if (Head == Tail) {
-		int l = fread(buffer, 1, BufferSize, stdin);
-		Tail = (Head = buffer) + l;
-	}
-	return *Head++;
-}
-int read() {
-	int x = 0, f = 1; char tc = getchar();
-	while (!isdigit(tc)) { if (tc == '-') f = -1; tc = getchar(); }
-	while (isdigit(tc)) { x = x * 10 + tc - '0'; tc = getchar(); }
-	return x * f;
-}
-
-#define maxn 1000010
-#define LL long long
-int n, S[maxn], A[maxn];
-bool has[maxn];
-struct HeapNode {
-	int id, x;
-	LL val;
-	bool operator < (const HeapNode& t) const { return val != t.val ? val < t.val : x > t.x; }
-};
-HeapNode Max(HeapNode a, HeapNode b) {
-	if (a < b) return b;
-	return a;
-}
-priority_queue <HeapNode> Q, Q2;
-
-int main() {
-	n = read();
-	for (int i = 1; i <= n; i++) S[i] = read();
-	for (int i = 1; i <= n; i++) A[i] = read();
-
-	while (!Q.empty()) Q.pop();
-	while (!Q2.empty()) Q2.pop();
-	for (int i = 1; i <= n; i++) Q.push(/*(HeapNode)*/{ i, S[i], (LL)A[i] + 2ll * S[i] });
-	int T = 0, Tid = 0; LL ans = 0;
-	for (int i = 1; i <= n; i++) {
-		HeapNode u; u = /*(HeapNode)*/{ 0, 0, 0 };
-		if (!Q.empty()) {
-			u = Q.top(); Q.pop();
-			while (u.x <= T && !Q.empty())u = Q.top(), Q.pop();
-			if (u.x > T && Q.empty()) u = /*(HeapNode)*/{ 0, 0, 0 };
-			else u.val -= 2ll * T;
-		}
-		HeapNode v; v = /*(HeapNode) */{ 0, 0, 0 };
-		if (!Q2.empty()) v = Q2.top(), Q2.pop();
-		u = Max(u, v); has[u.id] = 1;
-		ans += u.val;
-		printf("%lld\n", ans);
-		if (u.x > T) {
-			T = u.x;
-			for (++Tid; Tid <= n && S[Tid] <= T; Tid++) if (!has[Tid])
-				Q2.push(/*(HeapNode)*/{ Tid, S[Tid], A[Tid] });
-		}
-	}
-
-	return 0;
-}
 int main() {
 	int Distance[100011];
 	int Value[100011];
