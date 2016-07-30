@@ -61,7 +61,7 @@ inline Point Find(Point x) {
 	return temp;
 }
 void BFS(Point source);
-a:父节点，子结点
+//a:父节点，子结点
 inline void Union(Point a, Point b) {
 	auto fa_a = Find(a);
 	auto fa_b = Find(b);
