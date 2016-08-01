@@ -13,24 +13,26 @@
 #include <cmath>
 #include <Windows.h>
 #include <set>
-#include "OpenJudgeTest.h"
 using namespace std;
 #endif // DEBUG
 #define N 4000
 class BigNumber;
 typedef BigNumber BN;
+#define m(a) memset(a,0,sizeof(a))
 class BigNumber {
 	int len, s[N];
 public:
-	BigNumber() { len = 1; memset(s, 0, sizeof(s)); };
+	BigNumber() { len = 1; m(s); };
 	BN operator=(const  char*a) {
 		len = strlen(a);
+		m(_num);m(s);
 		for (int i = 0; i < len; i++)
 			s[i] = a[len - i - 1] - '0';
 		return *this;
 	}
 	BN operator=(const int num) {
 		char _num[N];
+		m(_num);m(s);
 		sprintf_s(_num, "%d", num);
 		*this = _num;
 		return *this;
@@ -55,12 +57,10 @@ public:
 	BN operator*(const BN &a) {
 		BN c;
 		c.len = len + a.len;
-		int x = 0;
 		for (int i = 0; i < len; i++) {
-			x = 0;
 			for (int j = 0; j < a.len; j++) {
-				c.s[i + j] += s[i] + a.s[j] + x;
-				x = c.s[i + j + 1] / 10;
+				c.s[i + j] += s[i]*a.s[j];
+				c.s[i + j + 1] +=c.s[i+j]/ 10;
 				c.s[i + j] %= 10;
 			}
 		}
@@ -81,7 +81,7 @@ public:
 		int b_fu = false;
 		if (*this < a) //cout << "-";
 			b_fu = true;
-		int i = 1;
+		int i = 0;
 		while (i < a.len || i < len) {
 			if (s[i] < a.s[i]) {
 				s[i] += 10;
@@ -93,11 +93,16 @@ public:
 		c.len = i;
 		while (c.len > 0 && c.s[c.len] == 0)c.len--;
 	}
-	friend ostream operator<<(ostream &out, const BN &x) {
+	//Pilot projects using by #define Experimental
+	#ifdef Experimental
+	//There is something wrong with the function,error with "Try to reference a function of the deleted".
+	//Fix it
+	/*friend ostream operator<<(ostream &out, const BN &x) {
 		for (int i = x.len; i >= 0; --i)
 			cout << x.s[i];
 		return out;
-	}
+	}*/
+	
 	BN operator/(BN&a) {
 		BN c;
 		//使用多次减法模拟除法
@@ -106,4 +111,5 @@ public:
 		//商：i
 		return c;
 	}
+	#endif // Experimental
 };
