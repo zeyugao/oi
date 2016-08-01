@@ -52,6 +52,7 @@ int bfs()
             if(c!=i)q.push(f[i]);
             cnt=0;
         }
+		//这里消耗q的元素，提取的都是同一层的东西，提取完了，说明也没元素，可以到下一层了
         int v=q.front();ans++;q.pop();
         for(int i=head[v];i;i=nxt[i])
         {
