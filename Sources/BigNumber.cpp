@@ -25,7 +25,7 @@ public:
 	BigNumber() { len = 1; m(s); };
 	BN operator=(const  char*a) {
 		len = strlen(a);
-		m(_num);m(s);
+		m(s);
 		for (int i = 0; i < len; i++)
 			s[i] = a[len - i - 1] - '0';
 		return *this;
