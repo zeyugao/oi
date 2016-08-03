@@ -8,67 +8,52 @@
 //还是想复杂了
 
 #include<stdio.h>
-#define N 30
-int CPU[N][N]={0};		//定义机器并初始化为未工作状态
 
-typedef struct workprice
-{
-	int count;			//工件计数器，计算工件加工到了第几步
-	int machine[N];		//工件x(1-n)第y(1-m)步使用的机器编号
-	int time[N];		//工件x(1-n)第y(1-m)步使用的时间
-	int endtime;		//工件上次结束时的时间
-}Work;
+int n,m, order[500], machine[21][21], time[21][21];
+//          顺序  i工件j工序使用机械       时间 
+int now[21],    end_[21],    has_used_t[21][500], ans=0;
+//工件现工序号  现结束时间  i机器j时间是否被占用 
 
-//判断该段时间是机器否有空，参数为(机器编号， 开始时间， 结束时间)
-int OK(int Mnum, int begin, int end)
+int shu_ru()
 {
-	int i;
-	for(i=begin; i<=end; i++)
-		if(CPU[Mnum][i])
-			return 1;
-	return 0;
+	int i,j;
+	scanf("%d%d",&m,&n);
+	for(i=1;i<=m*n;i++)
+		   scanf("%d",&order[i]);
+	for(i=1;i<=n;i++)
+	  	for(j=1;j<=m;j++)
+		   	scanf("%d",&machine[i][j]);
+	for(i=1;i<=n;i++)
+	  	for(j=1;j<=m;j++)
+			    scanf("%d",&time[i][j]);
 }
-
+int check(int x,int bg,int ed)
+{
+    int i;
+   	for(i=bg;i<=ed;i++)
+	    	if(has_used_t[x][i]) return 0;
+	     return 1;
+}
 int main()
 {
-	Work G[N];									//定义工件
-	int train[361];								//定义队列记录给定顺序
-
-	int m, n, i, j, begin, machnum, step, time, ans=0;
-
-	scanf("%d %d", &m, &n);
-	for(i=1; i<=n; i++)							//初始化结构体变量的计数器和结束时间
-	{	G[i].count=0;	G[i].endtime=1;	}
-
-	for(i=1; i<=m*n; i++)						//输入给定安排顺序
-		scanf("%d", &train[i]);
-
-	for(i=1; i<=n; i++)
-		for(j=1; j<=m; j++)						//输入第i个工件第j步使用的机器编号
-			scanf("%d", &G[i].machine[j]);
-
-	for(i=1; i<=n; i++)	
-		for(j=1; j<=m; j++)						//输入第i个工件第j步需要花费的时间
-			scanf("%d", &G[i].time[j]);
-
-//核心代码
-	for(i=1; i<=m*n; i++)
-	{
-		step = ++G[train[i]].count;				//找到工件加工到了第几步
-		begin = G[train[i]].endtime;			//找到该工件上次的结束时间记录为本次开始时间
-		machnum = G[train[i]].machine[step];	//找到加工该工件第step步需要的机器号
-		time = G[train[i]].time[step];			//找到加工该工件第step步需要的时间
-
-		//找出实际能够开始的时间（即机器有足够长的时间能够完成加工该步骤的任务）
-		while(OK(machnum, begin, begin+time-1))		begin++;
-
-		for(j=begin; j<begin+time; j++)			//将该段时间标记为已经使用
-			CPU[machnum][j]=1;
-
-		ans = ans>(begin+time-1)?ans:(begin+time-1);	//取机器运行时间的最大值作为结果
-
-		G[train[i]].endtime=begin+time;			//刷新该工件的结束时间
+    int i,j,l;
+	   shu_ru();
+   	for(i=1;i<=m*n;i++)           //工序 
+   	{
+		    int x=order[i];               //提取工件 
+		    int y=machine[x][++now[x]];   //提取加工机器 
+		    int z=time[x][now[x]];        //提取所需时间 
+		
+		    for(j=end_[x];;j++)
+			       if(check(y,j,j+z-1))      //可插入?
+		       	{
+			         	for(l=0;l<z;l++)       //记录时段已使用 
+					           has_used_t[y][j+l]=1;
+			         if(j+z>ans) ans=j+z;    //更改总时间 
+				             end_[x]=j+z;       //更改x结束时间 
+			        	break; 
+			      }
 	}
-	printf("%d\n", ans);
+	printf("%d",ans);
 	return 0;
 }
