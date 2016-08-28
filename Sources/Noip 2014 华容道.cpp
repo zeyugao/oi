@@ -1,7 +1,7 @@
 /*只有空白块位于指定块的四方向上，指定块才可以移动。所以，我们可以记(x1,y1,dir)表示指定块在(x1,y1)，空白块在指定块的dir方向（0表示上，1表示下什么的......）的状态。这样状态只有4nm个。
 接下来我们考虑各个状态之间的连边。首先，空白块和指定块可以交换位置，这两个状态连边的边权为1；其次，假定空白块在指定块上方，空白块可以通过若干步移动来到空白块下/左/右方。这些状态连边的边权我们可以通过BFS计算出来。
 这样就构造出了一张图，先把空白块移动到目标块旁边，之后向目标状态（空白块可以位于指定块的四个方向）做最短路即可。用spfa复杂度为O(qknm)，可以通过100%的数据。*/
-
+//总体来说,大神做得出来
 #include <stdio.h>
 #include <string.h>
 #define QLEN 4000
@@ -37,10 +37,16 @@ void bfs(int si,int sj,int bi,int bj,int id)
     if(id == 4) return;
     for(k=0;k<4;k++)
     {
+		//bi,bj为指定点
+		//i,j为目标点
         i = bi+dir[k][0]; j = bj+dir[k][1];
         if((i == si && j == sj) || !dis[i][j]) continue;
+		//历遍所有位置,得到某一个状态到周围状态的距离
+		//这里的边是指定块不动，空白块围绕着它四周转的dis
         adde(bi*30*4+bj*4+id,bi*30*4+bj*4+k,dis[i][j]-1);
     }
+	//就是这条边,让指定方块位置能够改变的边
+	//这条边记录了空白块与 某一个块交换位置，相当于这两个状态的变化的dis
     adde(bi*30*4+bj*4+id,si*30*4+sj*4+(id^1),1);
 }
 void spfa(int si,int sj)
@@ -59,6 +65,7 @@ void spfa(int si,int sj)
         sn = sq[head++];
         for(i=p[sn];i;i=e[i][2])
         {
+			//在前面加入了一条不同的边,那条边让指定位置的方块发生移动,在这里获取到指定位置方块移动后状态所需要的最小哦dis
             fn = e[i][0]; val = e[i][1];
             if(sdis[fn]<=sdis[sn]+val) continue;
             sdis[fn] = sdis[sn]+val;
@@ -78,6 +85,7 @@ int main()
     for(i=1;i<=n;i++) for(j=1;j<=m;j++)
     {
         if(!map[i][j]) continue;
+		//空白块为(i-1,j)，被围绕的块为(i,j)，空白块到被围绕的块的周围的点，或者被围绕的块与空白块交换
         if(map[i-1][j]) bfs(i-1,j,i,j,0);
         if(map[i+1][j]) bfs(i+1,j,i,j,1);
         if(map[i][j-1]) bfs(i,j-1,i,j,2);
