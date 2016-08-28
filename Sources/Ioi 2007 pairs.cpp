@@ -1,4 +1,4 @@
-#include<cstdio>
+﻿#include<cstdio>
 #include<iostream>
 #include<cstring>
 #include<algorithm>
@@ -35,21 +35,13 @@ inline ll query(int x){
     while(x)sm+=t[x],x-=x&-x;
     return sm;
 }
-//先转化为切尔雪夫距离,将一个菱形范围的个数转化为一个矩形的范围的个数
-//按照x的大小递增排序
-//依次加入到“队列”中来这个队列用树状数组实现,每监测一个,先将在前面加入的不符合的点先删去,用top值来维护,top总是刚好满足上一个点的最左端,监测这个点时可以直接从top开始找,因为这是由x递增排序的,上一个点都不满足要求,这一个点也同样不可能满足要求
 inline void run2(){
     register int i;
     for(i=1;i<=n;i++)j=read(),k=read(),a[i].x=j+k,a[i].y=j-k+m;
     sort(a+1,a+1+n,cmp);int top=1;
     for(i=1;i<=n;i++){
-		//删除所有在这个点前面而横坐标大于d的点,
-		//这个树状数组记录的是满足条件的点的纵坐标,在每次循环开始时,最先进行的是剔除不满足条件的点,其此查询在需要的区间的点的个数,最后在加入当前这个点(自己肯定不能和自己连线呀)
-		//关于会不会直接一进来就删树状数组到负的情况:
         while(a[top].x+D<a[i].x)del(a[top].y),top++;
-		//查询纵坐标为范围内的有多少个
         ans+=query(a[i].y+D)-query(a[i].y-D-1),
-		//这里的add是在循环第一步时有一个先行条件过滤过的,没有加入后面的符合条件的点,是为了避免重复计算点对数,保证这个横坐标上的点只会计算到与前面的前面的关系,而后面的点由后面的点进行查询
         add(a[i].y);
     }
 }
@@ -67,7 +59,6 @@ inline void run3(){
     for(i=1;i<=n;){
         x=a[i].x;
         for(j=i;a[j+1].x==x;j++);
-		//获取从这个平面的原点到(x,y)中总共有多少个点
         while(i<=j)mp[x][a[i].y][a[i].z]++,i++;
         for(j=1;j<=M;j++)for(k=1;k<=M;k++)mp[x][j][k]+=mp[x][j-1][k]+mp[x][j][k-1]-mp[x][j-1][k-1];
     }
