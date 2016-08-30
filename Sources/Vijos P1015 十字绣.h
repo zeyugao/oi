@@ -137,4 +137,112 @@ int main()
 //
 */
 
+//
+//by coolxxx
+//
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<iomanip>
+#include<memory.h>
+#include<time.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
+#include<math.h>
+#define min(a,b) ((a)<(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
+#define abs(a) ((a)>0?(a):(-(a)))
+#define lowbit(a) (a&(-a))
+#define sqr(a) ((a)*(a))
+#define swap(a,b) ((a)^=(b),(b)^=(a),(a)^=(b))
+#define eps 1e-8
+#define J 10
+#define MAX 0x7f7f7f7f
+#define PI 3.1415926535897
+#define N 207
+using namespace std;
+int n,m,lll,ans,cas,cass;
+int a[N*N],b[N*N],fa[N*N],c[N*N];
+bool u[N*N],v[N*N];
+char map[2][N][N];
+int zhao(int aa)
+{
+	if(fa[aa]==-1)return aa;
+	return fa[aa]=zhao(fa[aa]);
+}
+int main()
+{
+	#ifndef ONLINE_JUDGE
+//	freopen("1.txt","r",stdin);
+//	freopen("2.txt","w",stdout);
+	#endif
+	int i,j,k,x,y,fx,fy;
+//	while(~scanf("%s",s1))
+	while(~scanf("%d",&n))
+//	for(scanf("%d",&cas),cass=1;cass<=cas;cass++)
+	{
+		memset(fa,-1,sizeof(fa));
+		memset(a,0,sizeof(a));
+		memset(b,0,sizeof(b));
+		memset(u,0,sizeof(u));
+		memset(v,0,sizeof(v));
+		ans=0;c[0]=0;
+		scanf("%d",&m);
+		for(k=0;k<2;k++)
+			for(i=0;i<n;i++)
+				scanf("%s",map[k][i]);
+		for(k=0;k<2;k++)
+		{
+			for(i=0;i<n;i++)
+			{
+				for(j=0;j<m;j++)
+				{
+					if(map[k][i][j]=='\\' || map[k][i][j]=='X')
+					{
+						x=i*(m+1)+j;y=(i+1)*(m+1)+j+1;
+						fx=zhao(x);fy=zhao(y);
+						if(fx!=fy)
+							fa[fy]=fx;
+						a[x]+=(-2)*k+1;
+						a[y]+=(-2)*k+1;
+						v[x]=v[y]=1;
+					}
+					if(map[k][i][j]=='/' || map[k][i][j]=='X')
+					{
+						x=i*(m+1)+j+1;y=(i+1)*(m+1)+j;
+						fx=zhao(x);fy=zhao(y);
+						if(fx!=fy)
+							fa[fy]=fx;
+						a[x]+=(-2)*k+1;
+						a[y]+=(-2)*k+1;
+						v[x]=v[y]=1;
+					}
+				}
+			}
+		}
+		for(i=0;i<(n+1)*(m+1);i++)
+		{
+			if(!v[i])continue;
+			j=zhao(i);
+			if(!u[j])u[j]=1,c[++c[0]]=j;
+			b[j]+=abs(a[i]);
+		}
+		for(i=1;i<=c[0];i++)
+		{
+			if(b[c[i]]==0)ans++;
+			else ans+=b[c[i]]/2;
+		}
+		printf("%d\n",ans);
+	}
+	return 0;
+}
+
+/*
+//
+
+//
+*/
+
 
