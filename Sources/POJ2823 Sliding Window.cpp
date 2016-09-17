@@ -1,10 +1,61 @@
-/*
+/*First
 source:http://baike.baidu.com/view/3771451.htm#2_3
 这个是典型的固定k区间的单调队列。套用的本质思想是，如求最小值： 考虑这样的一个问题，在某个区间当中如果存在某两个元素A,B，满足A的下标小于B的下标，A的值大于B的值，那么A这个数就可以删掉，不再考虑。求最大值反之。
 具体的操作是：从加入第k个数开始，每插入做一次队列单调性更新：
-删队尾【单调性】，入队，删队首【下标范围k以内】，输出队首【即最值】。*/
+删队尾[单调性]，入队，删队首[下标范围k以内]，输出队首[即最值]。*/
 //当A>B时，但如果B比A更晚进来，必定会在A前面出去，这就说明，只要B在，A就不可能会是最小值，就可以放心地删除A
 
+
+//Second
+//感觉这个好理解一点
+//source:http://blog.csdn.net/acvay/article/details/46772771
+/*队尾单调入队(入队元素大于队尾元素时直接入队  否则队尾出队直到队尾元素小于入队元素或者队列为空)  队首队尾都可以出队
+求最小值时 先判断队首元素是否在滑窗之内  不在队首就出队  然后队首元素就是滑窗中的最小值了   求最大值用单减队列就行了*/
+#include <cstdio>
+using namespace std;
+const int N = 1e6 + 5;
+int a[N], q[N], t[N];
+int front, rear, n, k;
+
+#define NOTMONO (!op && a[i] < q[rear - 1]) || (op && a[i] > q[rear - 1])
+//op = 0 时单增队列  op = 1 时单减队列
+void getMonoQueue(int op)
+{
+    front = rear = 0;
+    for(int i = 0; i < n; ++i)
+    {
+		//维护单调队列，神奇的二合一方法
+        while( rear > front && (NOTMONO)) --rear;
+		
+		//记录滑窗滑到i点的时间
+        t[rear] = i;
+        q[rear++] = a[i];
+		
+		
+		//保证队首元素在滑窗之内
+		//由于单调队列的性质，如果是单增队列，头部就是最大值
+		//出队也很容易，一直出队，又由于只是循环到i，保证队列中的元素的位置一定会小于window的右边框
+        while(t[front] <= i - k) ++front;
+		
+		//i>=k-1，从0开始计数
+        if(i > k - 2)
+            printf("%d%c", q[front], i == n - 1 ? '\n' : ' ');
+    }
+}
+
+int main()
+{
+    while (~scanf("%d%d", &n, &k))
+    {
+        for(int i = 0; i < n; ++i)
+            scanf("%d", &a[i]);
+        getMonoQueue(0); //单增队列维护最小值
+        getMonoQueue(1); //单减队列维护最大值
+    }
+
+    return 0;
+}
+//Third
 /*
 Source:http://blog.csdn.net/kenden23/article/details/37598147
 
