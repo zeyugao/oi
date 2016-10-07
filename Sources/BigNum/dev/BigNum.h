@@ -1,3 +1,5 @@
+//Sources:::::https://github.com/funtion/ACM/blob/master/%E6%A8%A1%E6%9D%BF/c%2B%2B%E9%AB%98%E7%B2%BE%E5%BA%A6.cpp
+
 #pragma once
 #define MAXN 9999
 #define DLEN 4
@@ -5,7 +7,7 @@
 class BigNum
 {
 private:
-	//在这个class中数据的储存方式：每len(MAXN+1)的数归为一个int，充分利用int的取值，避免了每个位都用一个int
+	//鍦ㄨ繖涓猚lass涓暟鎹殑鍌ㄥ瓨鏂瑰紡锛氭瘡len(MAXN+1)鐨勬暟褰掍负涓�涓猧nt锛屽厖鍒嗗埄鐢╥nt鐨勫彇鍊硷紝閬垮厤浜嗘瘡涓綅閮界敤涓�涓猧nt
 	int s[500];
 	int len;
 public:
