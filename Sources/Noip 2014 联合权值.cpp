@@ -1,3 +1,75 @@
+// Olympiad-in-Informatics-Test.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+const int maxn = 2000009;
+struct edge {
+	int to;
+	edge * next;
+}e[maxn * 2], *pt = e, *head[maxn];
+
+void add(int f, int t) {
+	pt->to = t; pt->next = head[f]; head[f] = pt++;
+}
+void addedge(int u, int v) { add(u, v); add(v, u); }
+
+int read() {
+	char c = getchar();
+	int ret = 0;
+	for (; !isdigit(c); c = getchar());
+	for (; isdigit(c); c = getchar())
+		ret = ret * 10 + c - '0';
+	return ret;
+}
+#define MOD 10007
+int w[maxn], mx[maxn], cnt[maxn], ans = 0, tot = 0;
+
+void dfs(int x, int fa) {
+	mx[x] = cnt[x] = 0;
+	for (edge *t = head[x]; t; t = t->next)
+		if (t->to != fa) {
+			dfs(t->to, x);
+			//当前结点*子节点的最大子节点
+			ans = max(ans, mx[t->to] * w[x]);
+			//当前结点最大子节点*当前节点的当前判断到的节点
+			ans = max(ans, w[t->to] * mx[x]);
+
+			//总和：当前结点*当前结点的子节点的所有子节点+当前结点的所有子节点*当前结点判断到的子节点
+			tot = (tot + w[x] * cnt[t->to] + w[t->to] * cnt[x]) % MOD;
+
+			//为什么原来这里少了一个=号，就WA了，不是不会影响结果的吗？还是溢出了？
+			//STMD就是溢出了，用long long 就不会有任何问题
+			cnt[x] += w[t->to], cnt[x] %= MOD;
+
+			mx[x] = max(mx[x], w[t->to]);
+		}
+}
+
+int main() {
+	int n; cin >> n;
+	for (int i = 1; i < n; i++) {
+		/*
+		int u = read()-1, v = read()-1;
+		*/
+		int u = read(), v = read();
+		addedge(u, v);
+	}
+	/*for (int i  =0; i < n; i++) {*/
+	for (int i = 1; i <= n; i++) {
+		w[i] = read();
+	}
+	/*dfs(0,-1);*/
+	dfs(1, 0);
+	cout << ans << " " << (tot * 2) % MOD << endl;
+	return 0;
+}
+
+
+
+
+
+
+
 /*
 这个题目的关键就是整个无向图其实就是一棵树
 那么和同一个父亲节点相连的子节点之间的距离必定是2
