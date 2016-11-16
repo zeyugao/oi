@@ -10,13 +10,14 @@
 - 树规 http://www.lai18.com/content/6120790.html
 
 
-邻接表
+- 邻接表
 用struct实现，不用数组e了
 const int maxn=10000;
 struct edge{
 	int to;
 	edge* next;
 }e[maxn],pt*=e,head[maxn];
+
 void addedge(int f,int t){
 	//当前指针pt，当前创建的边 
 	pt->to=t;
@@ -25,6 +26,7 @@ void addedge(int f,int t){
 	//将下一个同属于f父节点的边设为本此创建的边，为下一次创建新的同属于f的边做准备 
 	head[f] = pt++;
 }
+
 历遍x为父节点的边:
 for(edge * t = head[x];t;t=t->next){
   //TODO
