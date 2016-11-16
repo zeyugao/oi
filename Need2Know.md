@@ -11,7 +11,9 @@
 
 
 - 邻接表
-用struct实现，不用数组e了
+
+```cpp
+//用struct实现，不用数组e了
 const int maxn=10000;
 struct edge{
 	int to;
@@ -27,9 +29,10 @@ void addedge(int f,int t){
 	head[f] = pt++;
 }
 
-历遍x为父节点的边:
+//历遍x为父节点的边:
 for(edge * t = head[x];t;t=t->next){
   //TODO
   //use:
   t->to; // ok!
 }
+```
