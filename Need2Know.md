@@ -18,7 +18,7 @@ const int maxn=10000;
 struct edge{
 	int to;
 	edge* next;
-}e[maxn],pt*=e,head[maxn];
+}e[maxn],*pt=e,*head[maxn];
 
 void addedge(int f,int t){
 	//当前指针pt，当前创建的边 
