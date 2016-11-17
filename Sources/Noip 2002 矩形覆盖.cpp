@@ -59,8 +59,8 @@ void srch(int now) //寻找第now个点时矩形是否能覆盖
     {
 	//用dfs判断每一个点有不同的矩形覆盖所需要的花费
        struct square tmp=sqr[i];  //神奇的深搜后恢复原状态 
-	    
-	尝试用第ig个矩形覆盖第nowd个点
+	 
+	//尝试用第ig个矩形覆盖第nowd个点
        if(sqr[i].l.x>dots[now].x)
            sqr[i].l.x=dots[now].x;
        if(sqr[i].l.y>dots[now].y)
