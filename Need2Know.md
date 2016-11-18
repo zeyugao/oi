@@ -8,8 +8,6 @@
 - 二分图的最大匹配、完美匹配和匈牙利算法
 - AC自动机
 - 树规 http://www.lai18.com/content/6120790.html
-
-
 - 邻接表
 
 ```cpp
@@ -34,5 +32,24 @@ for(edge * t = head[x];t;t=t->next){
   //TODO
   //use:
   t->to; // ok!
+}
+```
+- 节点到根的距离
+```cpp
+int Find(int x){
+	if(x==f[x]) retunr x;
+	int temp = f[x];
+	f[x] = Find(fa[x]);
+	dis[x] += dis[temp];
+	return f[x];
+}
+void Union(int a,int b){
+	int fa = Find(a),b = Find(b);
+	if(fa!=fb){
+		f[fa] = fb;
+		dis[a]= dis[b]+1;
+	}else{
+		//TODO
+	}
 }
 ```
