@@ -53,3 +53,34 @@ void Union(int a,int b){
 	}
 }
 ```
+- Tarjan LCA
+```cpp
+int Find(int x){
+	if(x!=f[x]) f[x] = Find(f[x]);
+	return f[x];
+}
+
+
+void Union(int a,int b){
+	int fa = Find(a),b = Find(b);
+	if(x==y) return;
+	if(rnk[fa]>rnk[fb]) f[fb] = fa;
+	else f[fa] =fb,rnk[fb] += rnk[fa]==rnk[fb];
+}
+
+int ancestor[1000];
+bool visited[1000];
+void Tarjan(int x){
+	for(int i =0;i<tree[x].size();i++){
+		Tarjan(tree[x][i]);
+		Union(x,tree[x][i]);
+		ancestor[Find(x)] =x;
+	}
+	visited[x]=true;
+	for(int i =0;i<query[x].size();i++){
+		if(visited[query[x][i]]){
+			dis[anotherpoint] = abs(d[x] + d[query[x]] - 2* ancestor[Find(query[x][i])]);
+		}
+	}
+}
+```
