@@ -96,7 +96,7 @@ int main()
     }
     return 0;
 }
-/×
+/*
 【思路】
 
 单调队列优化DP。
@@ -111,7 +111,7 @@ f[i][j]=min{f[k][p]-sum[k][j]}+sum[i][j]，i-L<=k<=i-1
 
 　　 表示f[i][j]时括号中可以取到的最小值，单调队列j维护区间[i-L,i-1]内a[][j]的最小值。
 
-注意单调队列写法。×/
+注意单调队列写法。*/
 #include<cstdio>
 #include<cstring>
 #include<iostream>
