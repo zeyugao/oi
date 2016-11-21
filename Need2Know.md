@@ -79,7 +79,7 @@ void Tarjan(int x){
 	visited[x]=true;
 	for(int i =0;i<query[x].size();i++){
 		if(visited[query[x][i]]){
-			dis[anotherpoint] = abs(d[x] + d[query[x]] - 2* ancestor[Find(query[x][i])]);
+			dis[anotherpoint] = abs(d[x] + d[query[x]] - 2* d[ancestor[Find(query[x][i])]]);
 		}
 	}
 }
