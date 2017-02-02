@@ -53,7 +53,7 @@ void Union(int a,int b){
 	}
 }
 ```
-- Tarjan LCA
+- ~~Tarjan LCA~~（这个版本的好像有问题）
 ```cpp
 int Find(int x){
 	if(x!=f[x]) f[x] = Find(f[x]);
@@ -84,3 +84,5 @@ void Tarjan(int x){
 	}
 }
 ```
+
+- dfs和bfs到搜索完成时，判断了更优值并更新了之后，要记得`return;`，不然就卡循环了
