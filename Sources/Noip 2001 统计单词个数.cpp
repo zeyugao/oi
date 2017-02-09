@@ -1,60 +1,81 @@
-//Ë¼Â·Ò»Ñù£¬¶¼ÊÇÔ¤´¦Àí+dp£¬×Ö·û´®µÄÎÊÌâ£¬¾­µäÀ²£¬ ¸Ğ¾õºÜ¶àÎÊÌâ¶¼ÊÇÓÃÕâÖÖ·½·¨À´Ë¼¿¼µÄ
-//¸Ğ¾õÓÃstring ¼ÓO2ÓÅ»¯»á²»»áºÃÒ»µã£¬¶ÔÓÚÖ»ÄÜÊ¹ÓÃÒ»´Î¿ªÍ·µÄÎÊÌâ£¬ÎÒÓÃµÄÊÇusedÊı×é£¬Ó¦¸ÃÒ²ÊÇ¿ÉÒÔµÄ 
-//ÕâÀïÓÃµÄÊÇÃ¶¾Ù¿ªÍ·±ÜÃâÖØ¸´£¬Ëû¶¨ÒåµÄvisºÃÏñ¶¼Ã»ÓĞÓÃµ½
-
- 
-
-#include <cstdio>
-#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <cstring>
 using namespace std;
-char dic[10][200],s[300];
-int v[300][300],p,k,n,vis[300],f[300][60];
 
-bool find(int l,int r,int t){
-    int len=strlen(dic[t]);
-    for(int i=l;i<=r-len+1;i++){
-        bool flag=true;
-        //if(vis[i]) continue;
-        for(int j=0;j<len;j++){
-            if(s[i+j]!=dic[t][j]) flag=false; 
-        }
-        if(flag) v[l][r]++;
-    }
-    return false;
+int lines,part_k,dict_cnt;
+string str;
+int len;
+vector<string> dict[26];
+int word_cnt[201][201] ={0};
+
+bool Check(string str_check){
+	if(dict[str_check[0]-'a'].empty()){ //
+		return false;
+	}
+	for(vector<string>::iterator i = dict[str_check[0]-'a'].begin();i!=dict[str_check[0]-'a'].end();i++){
+		
+		if(str_check.length()>=(*i).length()&&str_check.substr(0,(*i).length()) == (*i)){
+			return true;
+		}
+	}
+	return false;
 }
 
+int PreCalcWordCnt(){
+	for(int j = len-1;j>=0;j--){ //å€’ç€é€’æ¨
+		for(int i = j;i>=0;i--){
+			word_cnt[i][j] = word_cnt[i+1][j] +(int)Check(str.substr(i,j-i+1));
+		}
+	}
+}
+
+
+//Summary:
+//	dp[i][j] = max{dp[t][j-1]+word_cnt[t+1][i]} j<=t<i
+//	å…¶ä¸­ï¼Œword_cntå¯ä»¥é¢„å¤„ç†å‡ºæ¥ï¼Œ
+//	ç”¨å€’ç€æ¨ï¼ˆä¸ºä»€ä¹ˆï¼Ÿï¼‰
+//	ä¿è¯æ¯æ¬¡æ¨çš„æ—¶å€™å½“å‰åŒºé—´çš„ç¬¬ä¸€ä¸ªå­—ç¬¦æ˜¯æ²¡æœ‰ç”¨åˆ°çš„ï¼Œä¸ä¼šå› ä¸ºåé¢çš„å•è¯å¯¼è‡´æ— æ³•ä½¿ç”¨è¿™ä¸ªå•è¯
+//	å¦‚æœä¸ç”¨å€’ç€æ¨ï¼Œè¿˜å¾—è¦å†æ¬¡åˆ¤æ–­è¿™ä¸ªå‰é¢çš„å­—ç¬¦æœ‰æ²¡æœ‰ä¸å®ƒå†²çªçš„
+//	å¹¶ä¸”ï¼Œç›´æ¥é€šè¿‡å¾€å‰å¼€è¾Ÿä¸€ä¸ªå­—ç¬¦è¿›è¡Œåˆ¤æ–­çš„å¥½å¤„è¿˜æœ‰
+//	è¦ç”¨åˆ°è¿™ä¸ªå­—ç¬¦ï¼Œé‚£ä¹ˆå°±åªæœ‰ä»¥è¿™ä¸ªå­—ç¬¦æ‰“å¤´çš„å•è¯æ‰å¯ä»¥äº†ï¼Œå‡å°‘äº†åˆ¤æ–­çš„å¤æ‚åº¦ 
 int main(){
-    scanf("%d%d",&p,&k);
-    for(int i=1;i<=p;i++){
-        char t[20];
-        scanf("%s",t);
-        for(int j=(i-1)*20+1;j<=i*20;j++) s[j]=t[(j-1)%20];
-    }
-    scanf("%d",&n);
-    for(int i=1;i<=n;i++) {
-        scanf("%s",dic[i]);
-        for(int j=1;j<i;j++) if(!strcmp(dic[i],dic[j])) i--,n--;
-
-    }
-    //Ô¤´¦Àív[i][j]±íÊ¾[i,j]Çø¼äÖĞÓĞ¶àÉÙ¸öµ¥´Ê
-    for(int i=1;i<=20*p;i++)
-        for(int j=i;j<=20*p;j++){
-            memset(vis,0,sizeof(vis));
-            for(int t=1;t<=n;t++) 
-                if(find(i,j,t)) v[i][j]++;
-        }
-//    for(int i=1;i<=20*p;i++){
-//        for(int j=1;j<=20*p;j++)printf("%d ",v[i][j]);
-//        printf("\n");
-//    }
-//        
-
-    //dp¹ı³Ì ¶¨Òåf[i][j]±íÊ¾Ç°i¸ö×Ö·û ·Ö³Éj¸ö²¿·ÖµÄ¸öÊı Ôòf[i][j]=max(f[i][j],f[k][j-1]+v[k+1][i]) 0<=k<=i-1;
-    for(int j=1;j<=k;j++)
-        for(int i=1;i<=20*p;i++)
-            for(int t=j-1;t<i;t++)//ÕâÀïÒª´Ój-1¿ªÊ¼ ·ñÔò»áÂ© 
-                f[i][j]=max(f[i][j],f[t][j-1]+v[t+1][i]);
-    printf("%d",f[20*p][k]);
-    return 0;
+	cin>>lines>>part_k;
+	for(int i =1 ;i<=lines;i++){
+		
+		string temp_read;
+		
+		cin>>temp_read;
+		str+=temp_read;  
+	}
+	len =  str.length();
+	cin>>dict_cnt;
+	for(int i = 1;i<=dict_cnt;i++){
+		string temp_read;
+		cin>>temp_read;
+		dict[temp_read[0]-'a'].push_back(temp_read);
+	}
+	PreCalcWordCnt();
+	
+	int dp[201][201] = {0};
+	
+	dp[0][0]  = word_cnt[0][0];
+	
+	for(int i = 0;i<len;i++){
+		dp[i][0] = word_cnt[0][i]; //åˆ†æˆ1ä»½é¢„å¤„ç† 
+	}
+	for(int i = 1;i<part_k;i++){ // æœ€å°‘åˆ†æˆ2ä»½ 
+		dp[i][i] = dp[i-1][i-1] + word_cnt[i][i]; // å°†å‰iä¸ªå­—ç¬¦åˆ†æˆiä»½ 
+	}
+	
+	for(int i = 0;i<len;i++){
+		for(int j = 1;j<part_k && j<i;j++){
+			for(int t = j ;t < i;t++){
+				dp[i][j] =max(dp[i][j],dp[t][j-1]+word_cnt[t+1][i]);
+			}
+		}
+	}
+	cout<<dp[len-1][part_k-1];
+	return 0;
 }
