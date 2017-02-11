@@ -20,6 +20,7 @@ void Remove(int c) {
 		}
 	}
 }
+
 void Resume(int c) {
 	//顺序相反
 	for (int i = up[c]; i != c; i = up[i]) {
