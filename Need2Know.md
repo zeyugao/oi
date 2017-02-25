@@ -8,30 +8,30 @@
 - 二分图的最大匹配、完美匹配和匈牙利算法
 - AC自动机
 - 树规 http://www.lai18.com/content/6120790.html
-- 邻接表
+- 邻接表（原先版本的邻接表好像在历遍的时候会通过指针修改路径）
 
 ```cpp
-//用struct实现，不用数组e了
-const int maxn=10000;
-struct edge{
-	int to;
-	edge* next;
-}e[maxn],*pt=e,*head[maxn];
+const int kMaxNum = 0xfffff+10;//这里大小单独修改
+struct{
+  int from;	//来自的节点
+  int to;	//前往的节点
+  int weight;//路径的边权
+  int next;	//同出发点中的下一条边的index
+}edge[kMaxNum * 2];//如果是双向路径则需要*2，单向的则不需要
+int edge_count = 0;
+int edge_first[kMaxNum * 2] = { 0 };//同上
 
-void addedge(int f,int t){
-	//当前指针pt，当前创建的边 
-	pt->to=t;
-	//当前创建的边的下一个同属于f父节点的边 
-	pt->next = head[f];
-	//将下一个同属于f父节点的边设为本此创建的边，为下一次创建新的同属于f的边做准备 
-	head[f] = pt++;
+void AddSingleEdge(int from,int to,int weight){//单向路径
+  edge[edge_count++].from = from;
+  edge[edge_count++].to = to;
+  edge[edge_count++].weight = weight;
+  edge[edge_count++].next = edge_first[from];
+  edge_first[from] = edge_count;
 }
 
-//历遍x为父节点的边:
-for(edge * t = head[x];t;t=t->next){
-  //TODO
-  //use:
-  t->to; // ok!
+void AddBilateralEdge(int from,int to,int weight){//双向路径
+  AddSingleEdge(from,to,weight);
+  AddSingleEdge(to,from,weight);
 }
 ```
 - 节点到根的距离
