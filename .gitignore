@@ -27,3 +27,6 @@
 *.exe
 *.out
 *.app
+
+# my commit file
+auto.cmd
