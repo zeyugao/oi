@@ -23,9 +23,9 @@ int edge_first[kMaxNum * 2] = { 0 };//同上
 
 void AddSingleEdge(int from,int to,int weight){//单向路径
   edge[edge_count++].from = from;
-  edge[edge_count++].to = to;
-  edge[edge_count++].weight = weight;
-  edge[edge_count++].next = edge_first[from];
+  edge[edge_count].to = to;
+  edge[edge_count].weight = weight;
+  edge[edge_count].next = edge_first[from];
   edge_first[from] = edge_count;
 }
 
