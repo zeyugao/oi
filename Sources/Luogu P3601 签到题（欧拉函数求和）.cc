@@ -16,7 +16,7 @@ void GetPrime() {
 		if (!is_not_prime[i]) {	//是非质数
 			prime[pt++] = i;	//就加入prime数组
 			if (i <= 1000) {
-				for (int j = i*i; j <= KMAXNUM; j += i) {
+				for (int j = i * i; j <= KMAXNUM; j += i) {
 					is_not_prime[j] = true;
 				}
 			}
@@ -39,7 +39,7 @@ int main() {
 		phi[i] = i + l; //i+l的欧拉函数值
 		num[i] = i + l;	//记录第i个数的数值
 	}
-
+	
 	for (int i = 1; i < pt; i++) {
 		long long num_div = l / prime[i] * prime[i];	//再找绝对能被这个质数整除的数，保证这个质数一定是这个大数的质因子
 		if (num_div < l) {
@@ -56,9 +56,9 @@ int main() {
 	//至此，所有的[l,r]区间中的数都被分解了因数
 	//为什么？
 	//所有的数都可以被分解多个质数的乘积，如果这是一个大质数，质数表并没有覆盖，那么它会在下面的再次判断中被解决掉
-
+	
 	int ans = 0;
-
+	
 	//Question:要是某个数是两个大质数相乘怎么办？又没办法被质数表中的质数分解
 	//范围决定了，这里可以覆盖到的10e6是否为质数，数据范围小于10e12，两个相乘，必定会有数小于等于10e6，可被质数表覆盖
 	for (int i = 0; i <= r - l; i++) {

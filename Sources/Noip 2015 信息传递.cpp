@@ -10,10 +10,10 @@
 #include <Windows.h>
 using namespace std;
 
-int fa[200010],dis[200010],ans=0xfffffff;
+int fa[200010], dis[200010], ans = 0xfffffff;
 
 int Find(int x) {
-	if (fa[x] == x)return x;
+	if (fa[x] == x) { return x; }
 	int temp = fa[x];
 	fa[x] = Find(fa[x]);
 	dis[x] += dis[temp];
@@ -33,12 +33,12 @@ void Union(int x, int y) {
 int main() {
 	int n;
 	cin >> n;
-	for (int i = 1; i <= n; i++)fa[i] = i;
+	for (int i = 1; i <= n; i++) { fa[i] = i; }
 	for (int i = 1; i <= n; i++) {
 		int ti;
 		cin >> ti;
 		Union(i, ti);
-
+		
 	}
 	cout << ans;
 	//system("pause");

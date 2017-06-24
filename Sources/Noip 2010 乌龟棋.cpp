@@ -32,17 +32,17 @@ int main() {
 	int n, m;
 	std::cin >> n >> m;
 	int card[5] = { 0 }, map[351] = { 0 }, dp[41][41][41][41] = { 0 };
-	for (int i = 1; i <= n; i++)std::cin >> map[i];
+	for (int i = 1; i <= n; i++) { std::cin >> map[i]; }
 	for (int i = 1; i <= m; i++) { int tmp; std::cin >> tmp; card[tmp]++; }
 	dp[0][0][0][0] = map[1];
 	for (int a = 0; a <= card[1]; a++) {
 		for (int b = 0; b <= card[2]; b++) {
 			for (int c = 0; c <= card[3]; c++) {
 				for (int d = 0; d <= card[4]; d++) {
-					if (a != 0)dp[a][b][c][d] = max(dp[a][b][c][d], dp[a - 1][b][c][d] + GetValue(a, b, c, d));
-					if (b != 0)dp[a][b][c][d] = max(dp[a][b][c][d], dp[a][b - 1][c][d] + GetValue(a, b, c, d));
-					if (c != 0)dp[a][b][c][d] = max(dp[a][b][c][d], dp[a][b][c - 1][d] + GetValue(a, b, c, d));
-					if (d != 0)dp[a][b][c][d] = max(dp[a][b][c][d], dp[a][b][c][d - 1] + GetValue(a, b, c, d));
+					if (a != 0) { dp[a][b][c][d] = max(dp[a][b][c][d], dp[a - 1][b][c][d] + GetValue(a, b, c, d)); }
+					if (b != 0) { dp[a][b][c][d] = max(dp[a][b][c][d], dp[a][b - 1][c][d] + GetValue(a, b, c, d)); }
+					if (c != 0) { dp[a][b][c][d] = max(dp[a][b][c][d], dp[a][b][c - 1][d] + GetValue(a, b, c, d)); }
+					if (d != 0) { dp[a][b][c][d] = max(dp[a][b][c][d], dp[a][b][c][d - 1] + GetValue(a, b, c, d)); }
 					/*
 					int temp = 0;
 					if (a)temp = max(temp, dp[a - 1][b][c][d]);

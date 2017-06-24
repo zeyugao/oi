@@ -31,15 +31,15 @@ int mod = 10007;
 int slowpower(int a, int b) {
 	int t = 1;
 	for (int i = 0; i < b; i++) {
-		t = t*a%mod;
+		t = t * a % mod;
 	}
 	return t;
 }
 int quickpower(int a, int b) {
 	int t = 1, y = a;
 	while (b != 0) {
-		if (b & 1)t = (t*y) % mod;
-		y = (y*y) % mod;
+		if (b & 1) { t = (t * y) % mod; }
+		y = (y * y) % mod;
 		b = b >> 1;
 	}
 	return t;
@@ -52,12 +52,12 @@ int main() {
 	int ans = 1;
 	//一开始总有两个点会答案错误，才发现是这里有问题，上codevs获取数据，手动调试，发现在错误的答案上，ans会直接溢出，难怪错了
 	a %= mod, b %= mod;
-	ans = quickpower(a,n)*quickpower(b,m)%mod;
-	for(int i =0;i<=k;i++)C[i][0] = C[i][i] = 1;
-	for (int i = 0; i <= k; i++)
-	{
-		for (int j = 1; j <= i; j++)
+	ans = quickpower(a, n) * quickpower(b, m) % mod;
+	for (int i = 0; i <= k; i++) { C[i][0] = C[i][i] = 1; }
+	for (int i = 0; i <= k; i++) {
+		for (int j = 1; j <= i; j++) {
 			C[i][j] = (C[i - 1][j - 1] + C[i - 1][j]) % mod;
+		}
 	}
 	ans = (C[k][n] * ans) % mod;
 	//ans = (C[k][m] * ans) % mod;也行

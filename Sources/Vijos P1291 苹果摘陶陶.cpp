@@ -3,34 +3,34 @@
 #include <algorithm>
 #include <queue>
 using namespace std;
-bool cmp(int a,int b){
-	return a>b;
+bool cmp(int a, int b) {
+	return a > b;
 }
-int main(){
-	int n,m;
-	int tao[2001],apple[2001];
-	memset(tao,0,sizeof(tao));
-	memset(apple,0,sizeof(apple));
-	cin>>n>>m;
-	for(int i= 1;i<=n;i++){
-		cin>>apple[i];
+int main() {
+	int n, m;
+	int tao[2001], apple[2001];
+	memset(tao, 0, sizeof(tao));
+	memset(apple, 0, sizeof(apple));
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++) {
+		cin >> apple[i];
 	}
-	for(int i = 1;i<=m;i++){
-		cin>>tao[i];
+	for (int i = 1; i <= m; i++) {
+		cin >> tao[i];
 	}
-	sort(tao+1,tao+m+1,cmp);
-	int left=m;
-	for(int i =1;i<=n;i++){
-		for(int j = 1;j<=m;j++){
-    //题目中的是"只能在它所能摘到的高度以下的最高的陶陶"，当且仅当苹果的高度严格大于陶陶的高度时，才可以摘到
-			if(apple[i]>tao[j]&&tao[j]!=0){
-				tao[j]=0;
+	sort(tao + 1, tao + m + 1, cmp);
+	int left = m;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			//题目中的是"只能在它所能摘到的高度以下的最高的陶陶"，当且仅当苹果的高度严格大于陶陶的高度时，才可以摘到
+			if (apple[i] > tao[j] && tao[j] != 0) {
+				tao[j] = 0;
 				left--;
 				break;
 			}
 		}
 	}
-	cout<<left;
+	cout << left;
 	return 0;
 }
 
@@ -44,32 +44,32 @@ int main(){
 #include <algorithm>
 #include <queue>
 using namespace std;
-int main(){
-	int n,m;
+int main() {
+	int n, m;
 	priority_queue<int> tao;
 	priority_queue<int> apple;
-	cin>>n>>m;
+	cin >> n >> m;
 	int tmp;
-	for (int i =1 ;i<=n;i++){
-		cin>>tmp;apple.push(tmp);
+	for (int i = 1 ; i <= n; i++) {
+		cin >> tmp; apple.push(tmp);
 	}
-	for(int i =1;i<=m;i++){
-		cin>>tmp;tao.push(tmp);
+	for (int i = 1; i <= m; i++) {
+		cin >> tmp; tao.push(tmp);
 	}
-	int left=0;
-	while(!apple.empty()&&!tao.empty()){
-		int h_apple =  apple.top();apple.pop();
-		int h_tao = tao.top();tao.pop();
+	int left = 0;
+	while (!apple.empty() && !tao.empty()) {
+		int h_apple =  apple.top(); apple.pop();
+		int h_tao = tao.top(); tao.pop();
 		
-		if(h_apple<=h_tao){
+		if (h_apple <= h_tao) {
 			left++;
-			while(!tao.empty()){
-				h_tao = tao.top();tao.pop();
-				if(h_tao<h_apple)break;
+			while (!tao.empty()) {
+				h_tao = tao.top(); tao.pop();
+				if (h_tao < h_apple) { break; }
 				left++;
 			}
 		}
 	}
-	cout<<left;
+	cout << left;
 	return 0;
 }

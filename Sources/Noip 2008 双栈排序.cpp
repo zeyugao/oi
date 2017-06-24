@@ -6,9 +6,9 @@
 四、算法实现：
 将所有冲突的元素连上一条线（用邻接表、哈希神马都可以，线不会多到那里去，本代码采用哈希），全部连完后，从第一个点开始到第n个点，如果没染色就对它进行染色，并把与它矛盾的点染上另一个颜色，如果染色过程中出现将一个有颜色的点染成另一种颜色的情况，那么就无解，因为至少有其中一个单栈无法进行排序。（其实染色的过程就是在解决最后问题中对元素的分）。最后用贪心模拟一遍就O拉~
 */
-#include<cstdio> 
-#include<iostream>   
-#include<algorithm> 
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
 using namespace std;
 
 int p[1010], col[1010], Min[1010], pai[3][1010], l[3];
@@ -32,56 +32,55 @@ void line(int x, int y) {
 
 void draw(int x, int c) {
 	//将x 染成颜色 c（1~2）
-	if (!col[x])  col[x] = c;
-	else
-		if (col[x] != c)
-		{
-			printf("0"); exit(0);
-		}
-		else return;
-		//如果x 有颜色且不为 c那么就无解
-		//x 的颜色代表了它在哪一个栈中进行过渡,被染了色而颜色又与本次所需要的颜色不相同,说明需要放两个栈中才可以,无解
-		for (int i = wei[x]; i; i = las[i])
-			draw(too[i], 3 - c);
-		//将与它冲突的点，染上另一个颜色
-		//让另一个点到另一个栈中,避免冲突
+	if (!col[x]) { col[x] = c; }
+	else if (col[x] != c) {
+		printf("0"); exit(0);
+	}
+	else { return; }
+	//如果x 有颜色且不为 c那么就无解
+	//x 的颜色代表了它在哪一个栈中进行过渡,被染了色而颜色又与本次所需要的颜色不相同,说明需要放两个栈中才可以,无解
+	for (int i = wei[x]; i; i = las[i]) {
+		draw(too[i], 3 - c);
+	}
+	//将与它冲突的点，染上另一个颜色
+	//让另一个点到另一个栈中,避免冲突
 }
 
 int main() {
 	scanf("%d", &n);
-	for (int i = 1; i <= n; i++) scanf("%d", &p[i]);
-
+	for (int i = 1; i <= n; i++) { scanf("%d", &p[i]); }
+	
 	Min[n] = p[n];
-	//求第 i ~ n 点中最小的点Min[i] 
-	for (int i = n - 1; i >= 1; i--)
+	//求第 i ~ n 点中最小的点Min[i]
+	for (int i = n - 1; i >= 1; i--) {
 		Min[i] = min(Min[i + 1], p[i]);
-
+	}
+	
 	pai[1][0] = 1002;  col[n + 1] = 1;
 	//初始化栈顶边界、栈底边界
 	pai[2][0] = 1002;  p[n + 1] = 1001;
 	//对最后一位元素之后那位处理以便最后把所有元素压出栈
-
+	
 	for (int i = 1; i <= n - 2; i++)
 		for (int j = i + 1; j <= n - 1; j++)
-			if (p[i] < p[j] && Min[j + 1] < p[i]) line(i, j);
-	//枚举每对点，如果有冲突，则连线（代表冲突） 
-
+			if (p[i] < p[j] && Min[j + 1] < p[i]) { line(i, j); }
+	//枚举每对点，如果有冲突，则连线（代表冲突）
+	
 	for (int i = 1; i <= n; i++)
 		//进行染色，即分成两个客栈，然后同时进行单栈排序
-		if (!col[i])  draw(i, 1);
-
+		if (!col[i]) { draw(i, 1); }
+		
 	//科学的打法是进行abcd优先判定的贪心模拟，以下是伤心病况的不科学打法— —！
 	for (int i = 1; i <= n + 1; i++) {
 		//模拟单栈排序，两个同时进行，到n+1是为了所有元素出栈
 		while (1)
 			//能出就出
 			if (pai[1][l[1]] == should) { should++; l[1]--; printf("b "); }
-			else
-				if (pai[2][l[2]] == should) { should++; l[2]--; printf("d "); }
-				else break;
-				pai[col[i]][++l[col[i]]] = p[i];
-				//进栈（就是这行！！！！发现了吗！！！！！！）
-				if (i < n + 1) printf("%c ", char(2 * col[i] + 95));
+			else if (pai[2][l[2]] == should) { should++; l[2]--; printf("d "); }
+			else { break; }
+		pai[col[i]][++l[col[i]]] = p[i];
+		//进栈（就是这行！！！！发现了吗！！！！！！）
+		if (i < n + 1) { printf("%c ", char(2 * col[i] + 95)); }
 	}
 }
 /*
@@ -129,23 +128,19 @@ using namespace std;
 const int MAXN = 1002;
 const int INF = 0x7FFFFFFF;
 
-class tStack
-{
-private:
+class tStack {
+  private:
 	int top;
 	int S[MAXN];
-public:
+  public:
 	tStack() : top(0) {}
-	void ins(int k)
-	{
+	void ins(int k) {
 		S[++top] = k;
 	}
-	int tp()
-	{
+	int tp() {
 		return S[top];
 	}
-	void pop()
-	{
+	void pop() {
 		top--;
 	}
 };
@@ -155,116 +150,96 @@ bool adjm[MAXN][MAXN];
 int N, top1, top2;
 tStack T[3];
 
-void init()
-{
+void init() {
 	int i;
 	freopen("twostack.in", "r", stdin);
 	freopen("twostack.out", "w", stdout);
 	scanf("%d", &N);
-	for (i = 1; i <= N; i++)
-	{
+	for (i = 1; i <= N; i++) {
 		scanf("%d", &S[i]);
 	}
 }
 
-void noanswer()
-{
+void noanswer() {
 	printf("0");
 	exit(0);
 }
 
-void color(int i, int c)
-{
+void color(int i, int c) {
 	bel[i] = c;
 	int j;
-	for (j = 1; j <= N; j++)
-	{
-		if (adjm[i][j])
-		{
-			if (bel[j] == c) //conflict : not a bipartite graph
-			{
+	for (j = 1; j <= N; j++) {
+		if (adjm[i][j]) {
+			if (bel[j] == c) { //conflict : not a bipartite graph
 				noanswer();
 			}
-			if (!bel[j])
-			{
+			if (!bel[j]) {
 				color(j, 3 - c); // color the opposite color 1<->2
 			}
 		}
 	}
 }
 
-void dye()
-{
+void dye() {
 	int i, j;
 	F[N + 1] = INF;
 	//找的是在j后面有一个k(i<j<k)，如果有k满足S[k]<S[i]<S[j]就不能符合条件，这里只要一个满足即可，可以取从j+1开始的最小值，如果最小值都大于了S[j]，就说明这个序列是可以的
-	for (i = N; i >= 1; i--)
-	{
+	for (i = N; i >= 1; i--) {
 		F[i] = S[i];
-		if (F[i + 1] < F[i])
+		if (F[i + 1] < F[i]) {
 			F[i] = F[i + 1];
+		}
 	}
-	for (i = 1; i <= N - 1; i++)
-	{
-		for (j = i + 1; j <= N; j++)
-		{
-			if (S[i] < S[j] && F[j + 1] < S[i])
-			{
+	for (i = 1; i <= N - 1; i++) {
+		for (j = i + 1; j <= N; j++) {
+			if (S[i] < S[j] && F[j + 1] < S[i]) {
 				adjm[i][j] = adjm[j][i] = true;
 			}
 		}
 	}
-	for (i = 1; i <= N; i++)
-	{
-		if (!bel[i])
-		{
+	for (i = 1; i <= N; i++) {
+		if (!bel[i]) {
 			color(i, 1);
 		}
 	}
 }
 
-void solve()
-{
+void solve() {
 	int i, should = 1, s;
-	for (i = 1; i <= N; i++)
-	{
+	for (i = 1; i <= N; i++) {
 		//should 为当前应该为哪一个数字出队，如果top就是should，那么，直接出队即可
 		s = bel[i];
-		if (s == 1)
-		{
+		if (s == 1) {
 			T[1].ins(S[i]);
 			printf("a ");
 		}
-		else
-		{
+		else {
 			T[2].ins(S[i]);
 			printf("c ");
 		}
-		while (T[1].tp() == should || T[2].tp() == should)
-		{
+		while (T[1].tp() == should || T[2].tp() == should) {
 			//should 为当前应该为哪一个数字出队，如果top就是should，那么，直接出队即可
-			if (T[1].tp() == should)
-			{
+			if (T[1].tp() == should) {
 				T[1].pop();
 				printf("b");
-				if (should != N)
+				if (should != N) {
 					printf(" ");
+				}
 				should++;
 			}
-			else
-			{
+			else {
 				T[2].pop();
 				printf("d");
-				if (should != N)
+				if (should != N) {
 					printf(" ");
+				}
 				should++;
 			}
 		}
 	}
 }
 
-int main()
-{
+int main() {
 	init();
 	dye();
 	solve();

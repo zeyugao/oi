@@ -46,7 +46,7 @@ int GetLen(ull num) {
 ull GetNum(int b, int e) {
 	double t = 0;
 	for (int i = e; i >= b; i--) {
-		t = t * 10 + Target[i]-'0';
+		t = t * 10 + Target[i] - '0';
 	}
 	return t;
 }
@@ -77,7 +77,7 @@ int main() {
 					//ToDo
 				}
 			}
-
+			
 			ull last = 0;
 			ull t_2;
 			last = GetNum(temp_pos, temp_pos + len - 1);
@@ -85,21 +85,22 @@ int main() {
 			//主体部分比较
 			while (temp_pos + len - 1 <= Target.size() && !exit) {
 				//9，99，999……的情况
-				if (GetLen(last) != GetLen(last + 1))len++;
+				if (GetLen(last) != GetLen(last + 1)) { len++; }
 				t_2 = GetNum(temp_pos, temp_pos + len - 1);
-				if (t_2 != last + 1)
+				if (t_2 != last + 1) {
 					exit = true;
+				}
 				else {
 					last = t_2, temp_pos += len;
 				}
 			}
-		aaaa:
-			if (exit)continue;
-
+aaaa:
+			if (exit) { continue; }
+			
 			//比较到temp_pos后，不足长度的字符串
 			temp_num_2 = GetNum(temp_pos, Target.size() - 1);
 			temp_num_1 = GetNum(temp_pos - len, temp_pos - 1) + 1;
-			if (GetLen(temp_num_1 + 1) != GetLen(temp_num_1))len++;
+			if (GetLen(temp_num_1 + 1) != GetLen(temp_num_1)) { len++; }
 			int times = len - (Target.size() - temp_pos);/*Target.size() -1 - temp_pos +1*/
 			while (times--) {
 				temp_num_1 /= 10;

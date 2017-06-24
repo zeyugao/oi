@@ -9,51 +9,50 @@
 
 #include<stdio.h>
 
-int n,m, order[500], machine[21][21], time[21][21];
-//          顺序  i工件j工序使用机械       时间 
-int now[21],    end_[21],    has_used_t[21][500], ans=0;
-//工件现工序号  现结束时间  i机器j时间是否被占用 
+int n, m, order[500], machine[21][21], time[21][21];
+//          顺序  i工件j工序使用机械       时间
+int now[21],    end_[21],    has_used_t[21][500], ans = 0;
+//工件现工序号  现结束时间  i机器j时间是否被占用
 
-int shu_ru()
-{
-	int i,j;
-	scanf("%d%d",&m,&n);
-	for(i=1;i<=m*n;i++)
-		   scanf("%d",&order[i]);
-	for(i=1;i<=n;i++)
-	  	for(j=1;j<=m;j++)
-		   	scanf("%d",&machine[i][j]);
-	for(i=1;i<=n;i++)
-	  	for(j=1;j<=m;j++)
-			    scanf("%d",&time[i][j]);
-}
-int check(int x,int bg,int ed)
-{
-    int i;
-   	for(i=bg;i<=ed;i++)
-	    	if(has_used_t[x][i]) return 0;
-	     return 1;
-}
-int main()
-{
-    int i,j,l;
-	   shu_ru();
-   	for(i=1;i<=m*n;i++)           //工序 
-   	{
-		    int x=order[i];               //提取工件 
-		    int y=machine[x][++now[x]];   //提取加工机器 
-		    int z=time[x][now[x]];        //提取所需时间 
-		
-		    for(j=end_[x];;j++)
-			       if(check(y,j,j+z-1))      //可插入?
-		       	{
-			         	for(l=0;l<z;l++)       //记录时段已使用 
-					           has_used_t[y][j+l]=1;
-			         if(j+z>ans) ans=j+z;    //更改总时间 
-				             end_[x]=j+z;       //更改x结束时间 
-			        	break; 
-			      }
+int shu_ru() {
+	int i, j;
+	scanf("%d%d", &m, &n);
+	for (i = 1; i <= m * n; i++) {
+		scanf("%d", &order[i]);
 	}
-	printf("%d",ans);
+	for (i = 1; i <= n; i++)
+		for (j = 1; j <= m; j++) {
+			scanf("%d", &machine[i][j]);
+		}
+	for (i = 1; i <= n; i++)
+		for (j = 1; j <= m; j++) {
+			scanf("%d", &time[i][j]);
+		}
+}
+int check(int x, int bg, int ed) {
+	int i;
+	for (i = bg; i <= ed; i++)
+		if (has_used_t[x][i]) { return 0; }
+	return 1;
+}
+int main() {
+	int i, j, l;
+	shu_ru();
+	for (i = 1; i <= m * n; i++) { //工序
+		int x = order[i];             //提取工件
+		int y = machine[x][++now[x]]; //提取加工机器
+		int z = time[x][now[x]];      //提取所需时间
+		
+		for (j = end_[x];; j++)
+			if (check(y, j, j + z - 1)) { //可插入?
+				for (l = 0; l < z; l++) { //记录时段已使用
+					has_used_t[y][j + l] = 1;
+				}
+				if (j + z > ans) { ans = j + z; } //更改总时间
+				end_[x] = j + z;   //更改x结束时间
+				break;
+			}
+	}
+	printf("%d", ans);
 	return 0;
 }

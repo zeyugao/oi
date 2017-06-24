@@ -24,7 +24,7 @@ char a[1001];
 int len;
 bool check() {
 	for (int i = 1, j = len; i <= j; i++, j--) {
-		if (m[i] != m[j])return false;
+		if (m[i] != m[j]) { return false; }
 	}
 	return true;
 }
@@ -33,32 +33,36 @@ void _plus() {
 	_m(c);
 	int i;
 	for (i = 1; i <= len; i++) {
-		c[i] += m[i] + m[len-i+1];
-		c[i+1]+= c[i] / ary;
+		c[i] += m[i] + m[len - i + 1];
+		c[i + 1] += c[i] / ary;
 		c[i] %= ary;
 	}
 	if (c[i] != 0) {
 		int j = 1;
 		len = i;
-		while (i > 0)
+		while (i > 0) {
 			m[j++] = c[i--];
+		}
 	}
 	else {
 		i -= 1;
 		int j = 1;
 		len = i;
-		while (i > 0)
+		while (i > 0) {
 			m[j++] = c[i--];
+		}
 	}
 }
 int main() {
 	cin >> ary >> a;
 	_m(m);
 	for (int i = 0; i < strlen(a); i++) {
-		if (a[i] < 'A')
-			m[i+1] =a[i]- '0';
-		else
-			m[i+1] =a[i]- 'A' + 10;
+		if (a[i] < 'A') {
+			m[i + 1] = a[i] - '0';
+		}
+		else {
+			m[i + 1] = a[i] - 'A' + 10;
+		}
 	}
 	len = strlen(a);
 	int times = 0;

@@ -19,7 +19,7 @@ using namespace std;
 #endif // _DEBUG
 
 int main() {
-	int m,t,num[101];
+	int m, t, num[101];
 	scanf_s("%d", &m);
 	set<int> a;
 	while (m--) {
@@ -28,11 +28,13 @@ int main() {
 	}
 	int aaa = 1;
 	set<int>::iterator i;
-	for (i = a.begin(); i != a.end(); i++)
+	for (i = a.begin(); i != a.end(); i++) {
 		num[aaa++] = *i;
+	}
 	printf_s("%d\n", a.size());
-	for (int ai = 1; ai < a.size(); ai++)
+	for (int ai = 1; ai < a.size(); ai++) {
 		printf_s("%d ", num[ai]);
+	}
 	printf_s("%d", num[a.size()]);
 	system("pause");
 	return 0;

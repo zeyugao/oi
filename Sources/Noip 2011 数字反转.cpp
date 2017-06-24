@@ -30,11 +30,11 @@
 
 int main() {
 	std::ios_base::sync_with_stdio(false);
-
+	
 	std::string str;
 	int pos;
 	std::cin >> str;
-	pos = str.size()-1;
+	pos = str.size() - 1;
 	while (str[pos] == '0' || str[pos] == ' ') {
 		pos--;
 	}

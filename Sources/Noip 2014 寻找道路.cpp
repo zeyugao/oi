@@ -12,7 +12,7 @@ int s, t;
 int n, m;
 vector<int> g[10011], gl[10011];
 void predfs(int n) {
-	if (ok[n]) return;
+	if (ok[n]) { return; }
 	ok[n] = 1;
 	for (int i = 0; i < gl[n].size(); i++) {
 		predfs(gl[n][i]);
@@ -28,8 +28,9 @@ void make_enable() {
 			}
 	}
 	for (int i = 1; i <= n; i++) {
-		if (chg[i])
+		if (chg[i]) {
 			ok[i] = 0;
+		}
 	}
 }
 int d[10010];
@@ -56,7 +57,7 @@ void spfa() {
 			}
 		}
 	}
-
+	
 }
 int main() {
 	cin >> n >> m;
@@ -73,7 +74,8 @@ int main() {
 	if (d[t] < 1061109567) {
 		cout << d[t] << endl;
 	}
-	else
+	else {
 		cout << "-1" << endl;
+	}
 	return 0;
 }

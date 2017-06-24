@@ -25,19 +25,19 @@ Point point[51];
 
 //这里用4个结构体优于4个数组，至少
 PointStruct globe_point_struct[5];
-int ans = INF*INF;
+int ans = INF * INF;
 bool check_one(int first, int second) {
 	//未被使用or未完全使用
 	if (globe_point_struct[first].rect.bottom == INF ||
-		globe_point_struct[first].rect.right == -INF ||
-		globe_point_struct[first].rect.left == INF ||
-		globe_point_struct[first].rect.top == -INF) {
+			globe_point_struct[first].rect.right == -INF ||
+			globe_point_struct[first].rect.left == INF ||
+			globe_point_struct[first].rect.top == -INF) {
 		return true;
 	}
 	if (globe_point_struct[second].rect.bottom == INF ||
-		globe_point_struct[second].rect.right == -INF ||
-		globe_point_struct[second].rect.left == INF ||
-		globe_point_struct[second].rect.top == -INF) {
+			globe_point_struct[second].rect.right == -INF ||
+			globe_point_struct[second].rect.left == INF ||
+			globe_point_struct[second].rect.top == -INF) {
 		return true;
 	}
 	if (//一个的左边在另一个的右边的右边
@@ -45,9 +45,9 @@ bool check_one(int first, int second) {
 		//一个的右边在另一个的左边的左边
 		globe_point_struct[first].rect.right < globe_point_struct[second].rect.left ||
 		//一个的上面在另一个的下面的下面
-		globe_point_struct[first].rect.top<globe_point_struct[second].rect.bottom ||
+		globe_point_struct[first].rect.top < globe_point_struct[second].rect.bottom ||
 		//一个的下面在另一个的上面的上面
-		globe_point_struct[first].rect.bottom>globe_point_struct[second].rect.top) {
+		globe_point_struct[first].rect.bottom > globe_point_struct[second].rect.top) {
 		return true;
 	}
 	return false;
@@ -66,12 +66,12 @@ int get_acreage() {
 	int ret_acreage = 0;
 	for (int i = 1; i <= rect_num; i++) {
 		if (globe_point_struct[i].rect.bottom == INF ||
-			globe_point_struct[i].rect.left == INF ||
-			globe_point_struct[i].rect.right == -INF ||
-			globe_point_struct[i].rect.top == -INF) {
+				globe_point_struct[i].rect.left == INF ||
+				globe_point_struct[i].rect.right == -INF ||
+				globe_point_struct[i].rect.top == -INF) {
 			continue;
 		}
-		ret_acreage += (globe_point_struct[i].rect.right - globe_point_struct[i].rect.left)*(globe_point_struct[i].rect.top - globe_point_struct[i].rect.bottom);
+		ret_acreage += (globe_point_struct[i].rect.right - globe_point_struct[i].rect.left) * (globe_point_struct[i].rect.top - globe_point_struct[i].rect.bottom);
 	}
 	return ret_acreage;
 }
@@ -81,7 +81,7 @@ void dfs_try_next_point(int now_point) {
 		return;
 	}
 	for (int i = 1; i <= rect_num; i++) {
-
+	
 		PointStruct point_struct_backup = globe_point_struct[i];
 		if (globe_point_struct[i].rect.bottom > point[now_point].y) {
 			globe_point_struct[i].rect.bottom = point[now_point].y;

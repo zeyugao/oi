@@ -38,14 +38,15 @@ int main() {
 	std::ios_base::sync_with_stdio(false);
 	int n;
 	std::cin >> n;
-
+	
 	int map[42][42] = { 0 },
-		//**走了**tot_step步，并且到了横坐标为x的位置
-		dp[42][21][21][21] = { 0 };
+					  //**走了**tot_step步，并且到了横坐标为x的位置
+					  dp[42][21][21][21] = { 0 };
 	memset(map, 0, sizeof(map));
 	for (int i = 1; i <= n; i++)
-		for (int j = 1; j <= n; j++)
+		for (int j = 1; j <= n; j++) {
 			std::cin >> map[i][j];
+		}
 	int tot_step, x_1, x_2, x_3;
 	for (tot_step = 1; tot_step <= 2 * n - 2; tot_step++)
 		//走了1步时就到(x,2)或(2,y)了，所以后面的是用tot_step-x_1+2而不是tot_step-x_1+1
@@ -58,25 +59,25 @@ int main() {
 					//(x_1 == n&&x_2 == n&&x_3 == n) || (x_1 == 1 && x_2 == 1 && x_3 == 1)) {
 				{
 					dp[tot_step][x_1][x_2][x_3] = MAX(
-						dp[tot_step - 1][x_1 - 1][x_2][x_3],
-						dp[tot_step - 1][x_1 - 1][x_2][x_3 - 1],
-						dp[tot_step - 1][x_1 - 1][x_2 - 1][x_3],
-						dp[tot_step - 1][x_1 - 1][x_2 - 1][x_3 - 1],
-						dp[tot_step - 1][x_1][x_2][x_3],
-						dp[tot_step - 1][x_1][x_2][x_3 - 1],
-						dp[tot_step - 1][x_1][x_2 - 1][x_3],
-						dp[tot_step - 1][x_1][x_2 - 1][x_3 - 1]
-					)
-						+ map[x_1][tot_step - x_1 + 2] + map[x_2][tot_step - x_2 + 2] + map[x_3][tot_step - x_3 + 2];
+													  dp[tot_step - 1][x_1 - 1][x_2][x_3],
+													  dp[tot_step - 1][x_1 - 1][x_2][x_3 - 1],
+													  dp[tot_step - 1][x_1 - 1][x_2 - 1][x_3],
+													  dp[tot_step - 1][x_1 - 1][x_2 - 1][x_3 - 1],
+													  dp[tot_step - 1][x_1][x_2][x_3],
+													  dp[tot_step - 1][x_1][x_2][x_3 - 1],
+													  dp[tot_step - 1][x_1][x_2 - 1][x_3],
+													  dp[tot_step - 1][x_1][x_2 - 1][x_3 - 1]
+												  )
+												  + map[x_1][tot_step - x_1 + 2] + map[x_2][tot_step - x_2 + 2] + map[x_3][tot_step - x_3 + 2];
 					/*if (x_1 == x_2)dp[tot_step][x_1][x_2][x_3] -= map[x_1][tot_step - x_1 + 2];
 					if (x_1 == x_3)dp[tot_step][x_1][x_2][x_3] -= map[x_1][tot_step - x_1 + 2];
 					if (x_2 == x_3)dp[tot_step][x_1][x_2][x_3] -= map[x_2][tot_step - x_2 + 2];
 					*/
 					
-					if (x_1 == x_2&&x_1 != x_3)dp[tot_step][x_1][x_2][x_3] -= map[x_1][tot_step - x_1 + 2];
-					if (x_1 == x_3&&x_1 != x_2)dp[tot_step][x_1][x_2][x_3] -= map[x_1][tot_step - x_1 + 2];
-					if (x_2 == x_3&&x_1 != x_3)dp[tot_step][x_1][x_2][x_3] -= map[x_2][tot_step - x_2 + 2];
-					if (x_1 == x_2&&x_1 == x_3)dp[tot_step][x_1][x_2][x_3] -= (map[x_1][tot_step - x_1 + 2] * 2);
+					if (x_1 == x_2 && x_1 != x_3) { dp[tot_step][x_1][x_2][x_3] -= map[x_1][tot_step - x_1 + 2]; }
+					if (x_1 == x_3 && x_1 != x_2) { dp[tot_step][x_1][x_2][x_3] -= map[x_1][tot_step - x_1 + 2]; }
+					if (x_2 == x_3 && x_1 != x_3) { dp[tot_step][x_1][x_2][x_3] -= map[x_2][tot_step - x_2 + 2]; }
+					if (x_1 == x_2 && x_1 == x_3) { dp[tot_step][x_1][x_2][x_3] -= (map[x_1][tot_step - x_1 + 2] * 2); }
 				}
 	std::cout << dp[2 * n - 2][n][n][n] + map[1][1]/* + map[1][1] + map[n][n]*/;
 	system("pause");

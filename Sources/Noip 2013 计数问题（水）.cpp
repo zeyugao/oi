@@ -1,11 +1,12 @@
 int main() {
-	int n, x, ans=0, t;
+	int n, x, ans = 0, t;
 	scanf_s("%d%d", &n, &x);
-	for (int i = 1; i <= n;i++) {
+	for (int i = 1; i <= n; i++) {
 		t = i;
 		while (t) {
-			if (t % 10 == x) 
+			if (t % 10 == x) {
 				ans++;
+			}
 			t /= 10;
 		}
 	}

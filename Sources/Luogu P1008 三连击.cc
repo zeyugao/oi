@@ -23,16 +23,17 @@ bool CheckNumber(int a, int b, int c) {
 	ParseNumber(b, num_array);
 	ParseNumber(c, num_array);
 	for (int i = 1; i < 10; i++) {
-		if (num_array[i] != 1)
+		if (num_array[i] != 1) {
 			return false;
+		}
 	}
 	return true;
 }
 int main() {
 
 	for (int i = 100; i <= 999; i++) {
-		if (i * 3 >= 1000)break;
-
+		if (i * 3 >= 1000) { break; }
+		
 		if (CheckNumber(i, 2 * i, 3 * i)) {
 			printf("%d %d %d\r\n", i, 2 * i, 3 * i);
 		}

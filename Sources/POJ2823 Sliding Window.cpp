@@ -19,41 +19,39 @@ int front, rear, n, k;
 
 #define NOTMONO (!op && a[i] < q[rear - 1]) || (op && a[i] > q[rear - 1])
 //op = 0 时单增队列  op = 1 时单减队列
-void getMonoQueue(int op)
-{
-    front = rear = 0;
-    for(int i = 0; i < n; ++i)
-    {
+void getMonoQueue(int op) {
+	front = rear = 0;
+	for (int i = 0; i < n; ++i) {
 		//维护单调队列，神奇的二合一方法
-        while( rear > front && (NOTMONO)) --rear;
+		while (rear > front && (NOTMONO)) { --rear; }
 		
 		//记录滑窗滑到i点的时间
-        t[rear] = i;
-        q[rear++] = a[i];
+		t[rear] = i;
+		q[rear++] = a[i];
 		
 		
 		//保证队首元素在滑窗之内
 		//由于单调队列的性质，如果是单增队列，头部就是最大值
 		//出队也很容易，一直出队，又由于只是循环到i，保证队列中的元素的位置一定会小于window的右边框
-        while(t[front] <= i - k) ++front;
+		while (t[front] <= i - k) { ++front; }
 		
 		//i>=k-1，从0开始计数
-        if(i > k - 2)
-            printf("%d%c", q[front], i == n - 1 ? '\n' : ' ');
-    }
+		if (i > k - 2) {
+			printf("%d%c", q[front], i == n - 1 ? '\n' : ' ');
+		}
+	}
 }
 
-int main()
-{
-    while (~scanf("%d%d", &n, &k))
-    {
-        for(int i = 0; i < n; ++i)
-            scanf("%d", &a[i]);
-        getMonoQueue(0); //单增队列维护最小值
-        getMonoQueue(1); //单减队列维护最大值
-    }
-
-    return 0;
+int main() {
+	while (~scanf("%d%d", &n, &k)) {
+		for (int i = 0; i < n; ++i) {
+			scanf("%d", &a[i]);
+		}
+		getMonoQueue(0); //单增队列维护最小值
+		getMonoQueue(1); //单减队列维护最大值
+	}
+	
+	return 0;
 }
 //Third
 /*
@@ -78,54 +76,46 @@ int qu[MAX_N];
 int index[MAX_N];
 int ans[MAX_N];
 
-void getMins()
-{
+void getMins() {
 	int tail = 0, head = 1;	//初始化tail<head表示为空列
-	for (int i = 1; i < K; i++)	//初始化单调队列
-	{
-		while (tail >= head && qu[tail] >= arr[i]) tail--;
+	for (int i = 1; i < K; i++) {	//初始化单调队列
+		while (tail >= head && qu[tail] >= arr[i]) { tail--; }
 		qu[++tail] = arr[i];		//记录可能的答案值
 		index[tail] = i;	//记录额外需要判断的信息
 	}
-	for (int i = K; i <= N; i++)
-	{
-		while (tail >= head && qu[tail] >= arr[i]) tail--; //不符合条件出列
+	for (int i = K; i <= N; i++) {
+		while (tail >= head && qu[tail] >= arr[i]) { tail--; } //不符合条件出列
 		qu[++tail] = arr[i];
 		index[tail] = i;
-		while (index[head] <= i-K) head++;
-		ans[i-K] = qu[head];	//ans从下标0开始记录
+		while (index[head] <= i - K) { head++; }
+		ans[i - K] = qu[head];	//ans从下标0开始记录
 	}
 }
 
-void getMaxs()
-{
+void getMaxs() {
 	int tail = 0, head = 1;
-	for (int i = 1; i < K; i++)	//初始化单调队列
-	{
-		while (tail >= head && qu[tail] <= arr[i]) tail--;
+	for (int i = 1; i < K; i++) {	//初始化单调队列
+		while (tail >= head && qu[tail] <= arr[i]) { tail--; }
 		qu[++tail] = arr[i];
 		index[tail] = i;
 	}
-	for (int i = K; i <= N; i++)
-	{
-		while (tail >= head && qu[tail] <= arr[i]) tail--; //不符合条件出列
+	for (int i = K; i <= N; i++) {
+		while (tail >= head && qu[tail] <= arr[i]) { tail--; } //不符合条件出列
 		qu[++tail] = arr[i];
 		index[tail] = i;
-		while (index[head] <= i-K) head++;
-		ans[i-K] = qu[head];	//ans从下标0开始记录
+		while (index[head] <= i - K) { head++; }
+		ans[i - K] = qu[head];	//ans从下标0开始记录
 	}
 }
 
-int main()
-{
-	while (~scanf("%d %d", &N, &K))
-	{
-		for (int i = 1; i <= N; i++) scanf("%d", &arr[i]);
+int main() {
+	while (~scanf("%d %d", &N, &K)) {
+		for (int i = 1; i <= N; i++) { scanf("%d", &arr[i]); }
 		getMins();
-		for (int i = 0; i <= N-K; i++) printf("%d ", ans[i]);
+		for (int i = 0; i <= N - K; i++) { printf("%d ", ans[i]); }
 		putchar('\n');
 		getMaxs();
-		for (int i = 0; i <= N-K; i++) printf("%d ", ans[i]);
+		for (int i = 0; i <= N - K; i++) { printf("%d ", ans[i]); }
 		putchar('\n');
 	}
 	return 0;

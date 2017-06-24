@@ -33,9 +33,9 @@ int main() {
 	int row_num, col_num, bullet_num;
 	int score[210][210] = { 0 };
 	char reward[210][210] = { 0 };
-
+	
 	cin >> row_num >> col_num >> bullet_num;
-
+	
 	for (int i = 1; i <= row_num; i++) {
 		for (int j = 1; j <= col_num; j++) {
 			scanf("%d %c", &score[i][j], &reward[i][j]);
@@ -54,8 +54,8 @@ int main() {
 			current_calc_row--;
 		}
 		//计算打了bullet发子弹的情况，打的子弹不可能多过行数
-		for (int bullet = 1; bullet <= row_num&&current_calc_row >= 1; bullet++) {
-
+		for (int bullet = 1; bullet <= row_num && current_calc_row >= 1; bullet++) {
+		
 			//多了一个子弹，并且不用还回去，就相当于少了一个子弹并还要还回去的分数+
 			//	因为不需要还回去，可以多打一个了
 			pre[col][bullet][0] = pre[col][bullet - 1][1] + score[current_calc_row][col];
@@ -65,7 +65,7 @@ int main() {
 			//由于这个是向后面借的一颗子弹，如果打的不是Y而是N的话，那么就无法得到奖励还回去了
 			//唯有打的是Y，才能还回去
 			pre[col][bullet][1] = pre[col][bullet][0];
-
+			
 			current_calc_row--;
 			while (reward[current_calc_row][col] == 'Y' && current_calc_row >= 1) {
 				//还是得要借了子弹才能打
@@ -75,36 +75,36 @@ int main() {
 		}
 	}
 	int dp[210][210][2] = { 0 };
-
+	
 	for (int col = 1; col <= col_num; col++) {
 		for (int bullet = 0; bullet <= bullet_num; bullet++) {
 			for (int bullet_current_col = 0; bullet_current_col <= row_num; bullet_current_col++) {
 				if (bullet_current_col <= bullet) {
-
+				
 					//当前列需要往后借，前面的列也要往后借，那就是这一列直接往后借，打完前面的列，再打这一列，还回去
 					//总体来就是当前列需要往后借
 					dp[col][bullet][1] = (std::max)(dp[col][bullet][1],
-						dp[col - 1][bullet - bullet_current_col][1] + pre[col][bullet_current_col][1]);
-
+													dp[col - 1][bullet - bullet_current_col][1] + pre[col][bullet_current_col][1]);
+													
 					if (bullet_current_col < bullet) {
 						//前面的列不需要往后借，那就是打完可以获得一个子弹
 						//刚好补在了当前列
 						//总体来就是当前列不需要往后借
-
+						
 						//要在前面的列获得子弹，一定要有子弹打==>bullet-bullet_current_col >= 1
 						dp[col][bullet][0] = (std::max)(dp[col][bullet][0],
-							dp[col - 1][bullet - bullet_current_col][0] + pre[col][bullet_current_col][1]);
+														dp[col - 1][bullet - bullet_current_col][0] + pre[col][bullet_current_col][1]);
 					}
-
+					
 					if (bullet_current_col > 0) {
 						//前面的列需要往后借一颗子弹
 						//这一列不需要借子弹，那就是可以获得一颗奖励的子弹
 						//这一颗子弹可以补回给前面那一列
 						//总体来就是不用往后借
-
+						
 						//这一列要获得一颗子弹，一定有子弹在这一列打出==>bullet_current_col > 0
 						dp[col][bullet][0] = (std::max)(dp[col][bullet][0],
-							dp[col - 1][bullet - bullet_current_col][1] + pre[col][bullet_current_col][0]);
+														dp[col - 1][bullet - bullet_current_col][1] + pre[col][bullet_current_col][0]);
 					}
 				}
 			}

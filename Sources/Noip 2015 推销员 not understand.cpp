@@ -35,37 +35,37 @@ bool has[maxn];
 const int BufferSize = 1 << 16;
 char buffer[BufferSize], *Head, *Tail;
 inline char Getchar() {
-    if(Head == Tail) {
-        int l = fread(buffer, 1, BufferSize, stdin);
-        Tail = (Head = buffer) + l;
-    }
-    return *Head++;
+	if (Head == Tail) {
+		int l = fread(buffer, 1, BufferSize, stdin);
+		Tail = (Head = buffer) + l;
+	}
+	return *Head++;
 }
 int read() {
-    int x = 0, f = 1; char tc = getchar();
-    while(!isdigit(tc)){ if(tc == '-') f = -1; tc = getchar(); }
-    while(isdigit(tc)){ x = x * 10 + tc - '0'; tc = getchar(); }
-    return x * f;
+	int x = 0, f = 1; char tc = getchar();
+	while (!isdigit(tc)) { if (tc == '-') { f = -1; } tc = getchar(); }
+	while (isdigit(tc)) { x = x * 10 + tc - '0'; tc = getchar(); }
+	return x * f;
 }
 struct HeapNode {
 	int id, x;
 	LL val;
 	//价值不相同时，按价值降序，否则，按距离升序
-	bool operator < (const HeapNode& t) const { return val != t.val ? val < t.val : x > t.x; }
+	bool operator < (const HeapNode &t) const { return val != t.val ? val <t.val : x> t.x; }
 };
 HeapNode Max(HeapNode a, HeapNode b) {
-	if (a < b) return b;
+	if (a < b) { return b; }
 	return a;
 }
 priority_queue <HeapNode> Q, Q2;
 
 int main() {
 	n = read();
-	for (int i = 1; i <= n; i++) S[i] = read();
-	for (int i = 1; i <= n; i++) A[i] = read();
-
-	while (!Q.empty()) Q.pop();
-	while (!Q2.empty()) Q2.pop();
+	for (int i = 1; i <= n; i++) { S[i] = read(); }
+	for (int i = 1; i <= n; i++) { A[i] = read(); }
+	
+	while (!Q.empty()) { Q.pop(); }
+	while (!Q2.empty()) { Q2.pop(); }
 	
 	//所有用户的相对于起点的劳累值
 	for (int i = 1; i <= n; i++) Q.push(/*(HeapNode)*/{ i, S[i], (LL)A[i] + 2ll * S[i] });
@@ -75,16 +75,16 @@ int main() {
 		if (!Q.empty()) {
 			u = Q.top(); Q.pop();
 			//Q这里保存的全部都是在划分界限右边的，此处是为了删除再划分界限以左的元素，相当于划分界线右移
-			while (u.x <= T && !Q.empty())u = Q.top(), Q.pop();
+			while (u.x <= T && !Q.empty()) { u = Q.top(), Q.pop(); }
 			if (u.x > T && Q.empty()) u = /*(HeapNode)*/{ 0, 0, 0 };
 			//当u.x>T时而Q不空时，ans+=A[i]+2*(S[i]-T)
 			//如果u.x<=T而Q不空时，不会有这种情况
 			//如果u.x<=T且Q空时， don't understand
 			//如果u.x>T且Q空，     __|
-			else u.val -= 2ll * T;
+			else { u.val -= 2ll * T; }
 		}
 		HeapNode v; v = /*(HeapNode) */{ 0, 0, 0 };
-		if (!Q2.empty()) v = Q2.top(), Q2.pop();
+		if (!Q2.empty()) { v = Q2.top(), Q2.pop(); }
 		u = Max(u, v); has[u.id] = 1;
 		ans += u.val;
 		printf("%lld\n", ans);
@@ -94,9 +94,9 @@ int main() {
 			//将在划分线左边的全部收入
 			//这里的全部收入就只是普通的推销劳累值，没有加上距离
 			for (++Tid; Tid <= n && S[Tid] <= T; Tid++) if (!has[Tid])
-				Q2.push(/*(HeapNode)*/{ Tid, S[Tid], A[Tid] });
+					Q2.push(/*(HeapNode)*/{ Tid, S[Tid], A[Tid] });
 		}
 	}
-
+	
 	return 0;
 }

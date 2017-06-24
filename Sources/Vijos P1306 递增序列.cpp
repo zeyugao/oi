@@ -8,59 +8,61 @@ using namespace std;
 char str[100];
 int dp[100][100];
 
-bool biger(int i, int j, int k, int w)
-{
-        if (i > j || k > w) return 1;
-        while (i < j && str[i] == '0') i++;
-        while (k < w && str[k] == '0') k++;
-        if (j-i != w-k) return j-i > w-k;
-        while (i <= j) {
-                if (str[i] != str[k]) return str[i] > str[k];
-                i++, k++;
-        }
-        return 0;
+bool biger(int i, int j, int k, int w) {
+	if (i > j || k > w) { return 1; }
+	while (i < j && str[i] == '0') { i++; }
+	while (k < w && str[k] == '0') { k++; }
+	if (j - i != w - k) { return j - i > w - k; }
+	while (i <= j) {
+		if (str[i] != str[k]) { return str[i] > str[k]; }
+		i++, k++;
+	}
+	return 0;
 }
 
-bool print(int i, int j)
-{
-        if (i-j == 0) {
-                for (int k = 1; k <= i; k++)
-                        putchar(str[k]);
-                return true;
-        }
-        for (int k = 1; k <= i-j; k++)
-                if (dp[i-j][k]+1 == dp[i][j] && biger(i-j+1, i, i-j-k+1, i-j)) {
-                        if (print(i-j, k)) {
-                                putchar(',');
-                                for (int p = i-j+1; p<=i; p++)
-                                        putchar(str[p]);
-                                return true;
-                        }
-                }
-        return false;
+bool print(int i, int j) {
+	if (i - j == 0) {
+		for (int k = 1; k <= i; k++) {
+			putchar(str[k]);
+		}
+		return true;
+	}
+	for (int k = 1; k <= i - j; k++)
+		if (dp[i - j][k] + 1 == dp[i][j] && biger(i - j + 1, i, i - j - k + 1, i - j)) {
+			if (print(i - j, k)) {
+				putchar(',');
+				for (int p = i - j + 1; p <= i; p++) {
+					putchar(str[p]);
+				}
+				return true;
+			}
+		}
+	return false;
 }
 
-int main()
-{
-        cin >> str+1;
-        int n = strlen(str+1);
-        memset(dp, -127/3, sizeof dp);
-        for (int i = 1; i <= n; i++)
-                dp[i][i] = 1;
-        for (int i = 1; i <= n; i++) {
-                for (int j = 1; j <= n; j++) {
-                        if(j <= i)
-                                for (int k = 1; k <= i-j; k++)
-                                        if (biger(i-j+1, i, i-j-k+1, i-j))
-                                                dp[i][j] = max(dp[i][j], dp[i-j][k]+1);
-                }
-        }
-        int ans = 1;
-        for(int i = 2; i <= n; i++)
-                if (dp[n][i] > dp[n][ans])
-                        ans = i;
-        print(n, ans);
-        return 0;
+int main() {
+	cin >> str + 1;
+	int n = strlen(str + 1);
+	memset(dp, -127 / 3, sizeof dp);
+	for (int i = 1; i <= n; i++) {
+		dp[i][i] = 1;
+	}
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (j <= i)
+				for (int k = 1; k <= i - j; k++)
+					if (biger(i - j + 1, i, i - j - k + 1, i - j)) {
+						dp[i][j] = max(dp[i][j], dp[i - j][k] + 1);
+					}
+		}
+	}
+	int ans = 1;
+	for (int i = 2; i <= n; i++)
+		if (dp[n][i] > dp[n][ans]) {
+			ans = i;
+		}
+	print(n, ans);
+	return 0;
 }
 
 /*

@@ -8,7 +8,7 @@ sources:http://blog.csdn.net/u013174702/article/details/45620723
 
 与第二类Stirling数的递推公式的推导过程相似：
 
-将n个小球放到k个盒子中的情况总数 = 
+将n个小球放到k个盒子中的情况总数 =
 
 1. 至少有一个盒子只有一个小球的情况数
 
@@ -37,17 +37,18 @@ f[n][k] = f[n-1][k-1] + f[n-k][k]
 */
 
 
-#include<stdio.h>
+#include <stdio.h>
 int f[205][10];
-int main(){
+int main() {
 	int n, k, i, j;
 	scanf("%d%d", &n, &k);
-	for (i = 1; i <= n; i++)
+	for (i = 1; i <= n; i++) {
 		f[i][1] = 1;
-
+	}
+	
 	f[0][0] = 1;
-	for (i = 1; i <= n; i++){
-		for (j = 1; j <= k && j <= i; j++){
+	for (i = 1; i <= n; i++) {
+		for (j = 1; j <= k && j <= i; j++) {
 			f[i][j] = f[i - 1][j - 1] + f[i - j][j];
 		}
 	}

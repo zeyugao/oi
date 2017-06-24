@@ -33,25 +33,25 @@ Walls wall[100];
 double _dis[100][100];
 double f[100][100];
 inline double _f(double x, double k, double b) {
-	return k*x + b;
+	return k * x + b;
 }
 bool check(int x1, int y1, int x2, int y2) {
 	//为什么我这么正确的用点斜式会错误
 	//double k = (walls(x2, y2).y - walls(x1, y1).y) / (walls(x2, y2).x - walls(x1, y1).x);
 	//double b = walls(x1, y1).y - k*walls(x1, y1).x;
-
+	
 	for (int i = x1 + 1; i < x2; i++) {
 		//double fx = _f(i, k, b);
 		
 		//这是用Δx*k+y做的
-		double fx = (walls(i, 0).x - walls(x1, 0).x)*(walls(x2, y2).y - walls(x1, y1).y) / (walls(x2, 0).x - walls(x1, 0).x) + walls(x1, y1).y;
-		if ((fx >= walls(i, 0).y&&fx <= walls(i, 1).y) || (fx >= walls(i, 2).y&&fx <= walls(i, 3).y));
-		else return false;
+		double fx = (walls(i, 0).x - walls(x1, 0).x) * (walls(x2, y2).y - walls(x1, y1).y) / (walls(x2, 0).x - walls(x1, 0).x) + walls(x1, y1).y;
+		if ((fx >= walls(i, 0).y && fx <= walls(i, 1).y) || (fx >= walls(i, 2).y && fx <= walls(i, 3).y));
+		else { return false; }
 	}
 	return true;
 }
 double getdis(int x1, int y1, int x2, int y2) {
-	return sqrt((walls(x1, y1).x - walls(x2, y2).x)*(walls(x1, y1).x - walls(x2, y2).x) + (walls(x1, y1).y - walls(x2, y2).y)*(walls(x1, y1).y - walls(x2, y2).y));
+	return sqrt((walls(x1, y1).x - walls(x2, y2).x) * (walls(x1, y1).x - walls(x2, y2).x) + (walls(x1, y1).y - walls(x2, y2).y) * (walls(x1, y1).y - walls(x2, y2).y));
 }
 
 int main() {
@@ -71,15 +71,16 @@ int main() {
 		walls(0, i).y = walls(n + 1, i).y = 5;
 		f[0][i] = 0;
 	}
-
+	
 	//dp
 	for (int i = 0; i < n + 1; i++)
 		for (int h_1 = 0; h_1 < 4; h_1++)
-			for (int j = i + 1; j <= n + 1;j++)
-				for (int h_2 = 0; h_2 < 4; h_2++) 
-					if (check(i, h_1, j, h_2)) 
-						if (f[j][h_2]>getdis(i, h_1, j, h_2) + f[i][h_1]) 
+			for (int j = i + 1; j <= n + 1; j++)
+				for (int h_2 = 0; h_2 < 4; h_2++)
+					if (check(i, h_1, j, h_2))
+						if (f[j][h_2] > getdis(i, h_1, j, h_2) + f[i][h_1]) {
 							f[j][h_2] = getdis(i, h_1, j, h_2) + f[i][h_1];
+						}
 	printf("%.2lf", f[n + 1][0]);
 	return 0;
 }
@@ -94,24 +95,24 @@ Walls wall[100];
 double _dis[100][100];
 double f[100][100];
 inline double _f(double x, double k, double b) {
-	return k*x + b;
+	return k * x + b;
 }
 bool check(int x1, int y1, int x2, int y2) {
 	double k = (walls(x2, y2).y - walls(x1, y1).y) / (walls(x2, y2).x - walls(x1, y1).x);
-	double b = walls(x1, y1).y - k*walls(x1, y1).x;
-
+	double b = walls(x1, y1).y - k * walls(x1, y1).x;
+	
 	for (int i = x1 + 1; i < x2; i++) {
 		bool bb = false;
 		for (int j = 0; j < 4; j += 2) {
 			auto fx = _f(i, k, b);
-			if (fx >= walls(i, j).y&&fx <= walls(i, j + 1).y)bb = true;
+			if (fx >= walls(i, j).y && fx <= walls(i, j + 1).y) { bb = true; }
 		}
-		if (!bb)return false;
+		if (!bb) { return false; }
 	}
 	return true;
 }
 double getdis(int x1, int y1, int x2, int y2) {
-	return sqrt((walls(x1, y1).x - walls(x2, y2).x)*(walls(x1, y1).x - walls(x2, y2).x) + (walls(x1, y1).y - walls(x2, y2).y)*(walls(x1, y1).y - walls(x2, y2).y));
+	return sqrt((walls(x1, y1).x - walls(x2, y2).x) * (walls(x1, y1).x - walls(x2, y2).x) + (walls(x1, y1).y - walls(x2, y2).y) * (walls(x1, y1).y - walls(x2, y2).y));
 }
 
 int main() {
@@ -134,15 +135,16 @@ int main() {
 		walls(0, i).y = walls(n + 1, i).y = 5;
 		f[0][i] = 0;
 	}
-
+	
 	//dp
 	for (int i = 0; i < n + 1; i++)
 		for (int h_1 = 0; h_1 < 4; h_1++)
-			for (int j = i + 1; j <= n + 1;j++)
-				for (int h_2 = 0; h_2 < 4; h_2++) 
-					if (check(i, h_1, j, h_2)) 
-						if (f[j][h_2]>getdis(i, h_1, j, h_2) + f[i][h_1]) 
+			for (int j = i + 1; j <= n + 1; j++)
+				for (int h_2 = 0; h_2 < 4; h_2++)
+					if (check(i, h_1, j, h_2))
+						if (f[j][h_2] > getdis(i, h_1, j, h_2) + f[i][h_1]) {
 							f[j][h_2] = getdis(i, h_1, j, h_2) + f[i][h_1];
+						}
 	printf_s("%.2lf", f[n + 1][0]);
 	system("pause");
 	return 0;
@@ -169,7 +171,7 @@ for (int i = 0; i < n+1; i++)
 							f[j][h_2] = getdis(i, h_1, j, h_2) + f[i][h_1];
 				}
 		}
-		
+
 		auto fx = _f(i, k, b);
 			if ((fx >= walls(i, 0).y&&fx <= walls(i, 1).y) || (fx >= walls(i, 2).y&&fx <= walls(i, 3).y));
 			else return false;*/
